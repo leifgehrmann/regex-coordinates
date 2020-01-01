@@ -3,8 +3,13 @@
 A single-page web application to parse text as coordinate data and
 output coordinate data as GeoJSON.
 
+Visit https://regex-coordinates.leifgehrmann.com/ to see it live.
+
 It solves a common use-case where one has a bunch of poorly structure CSV or
-database table output and one wants to simply display it quickly on a map. 
+database table output and one wants to simply display it quickly on a map.
+
+After generating the GeoJSON output, one can copy and paste it into
+http://geojson.io/
 
 ## Project setup
 ```

@@ -1,9 +1,10 @@
-# regex-coordinates
+# Regex-Coordinates
 
 A single-page web application to parse text as coordinate data and
 output coordinate data as GeoJSON.
 
 Visit https://regex-coordinates.leifgehrmann.com/ to see it live.
+(It's currently broken in Safari, so try Chrome for now...)
 
 It solves a common use-case where one has a bunch of poorly structure CSV or
 database table output and one wants to simply display it quickly on a map.

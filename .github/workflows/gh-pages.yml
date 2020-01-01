@@ -16,13 +16,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, build, and generate documentation
+    - name: npm install, build
       run: |
         npm ci
         npm run build
-        touch ./doc/.nojekyll
+        touch ./dist/.nojekyll
         sed -i '/\/dist/d' .gitignore
-        echo "regex-coordinates.leifgehrmann.com" >> ./doc/CNAME
+        echo "regex-coordinates.leifgehrmann.com" >> ./dist/CNAME
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2.6.0
       env:

@@ -3,14 +3,14 @@ import Vuetify from 'vuetify/lib';
 
 Vue.use(Vuetify);
 
-const mq = window.matchMedia('(prefers-color-scheme: dark)');
+const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 
 const vuetify = new Vuetify({
-  theme: { dark: mq.matches },
+  theme: { dark: mediaQueryList.matches },
 });
 
-mq.addEventListener('change', (e) => {
-  vuetify.framework.theme.dark = e.matches;
+mediaQueryList.addListener((event) => {
+  vuetify.framework.theme.dark = event.matches;
 });
 
 export default vuetify;

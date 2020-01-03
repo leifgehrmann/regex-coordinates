@@ -1,4 +1,4 @@
 export default interface MatchGroup {
-  groupNumber: number,
-  matchedValues: string[],
+  groupNumber: number;
+  matchedValues: string[];
 }

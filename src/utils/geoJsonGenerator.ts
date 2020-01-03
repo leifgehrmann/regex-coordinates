@@ -1,43 +1,54 @@
 type NumericArrayObject = { [key: string]: number[] };
 
 interface FeatureCollection {
-  type: string,
-  features: any
+  type: string;
+  features: PointFeature[];
+}
+
+interface Properties {
+  [key: string]: string;
+}
+
+interface PointFeature {
+  type: string;
+  properties: object;
+  geometry: {
+    type: string;
+    coordinates: number[];
+  };
 }
 
 export default class GeoJsonGenerator {
-  generate(parsedData: string[][], matchGroupTypes: string[]): string {
-    const matchGroupTypeLookup = this.invertMatchGroupTypes(matchGroupTypes);
-    const output = this.generateFeatureCollection();
+  static generate(parsedData: string[][], matchGroupTypes: string[]): string {
+    const matchGroupTypeLookup = GeoJsonGenerator.invertMatchGroupTypes(matchGroupTypes);
+    const output = GeoJsonGenerator.generateFeatureCollection();
 
-    if (!this.hasCoordinatesDefined(matchGroupTypeLookup)) {
+    if (!GeoJsonGenerator.hasCoordinatesDefined(matchGroupTypeLookup)) {
       return 'Please select Latitude and Longitude groups above.';
     }
 
-    if (this.hasTimeDefined(matchGroupTypeLookup)) {
+    if (GeoJsonGenerator.hasTimeDefined(matchGroupTypeLookup)) {
       // Todo: Add linestring feature
     }
 
-    const points = this.generatePointFeatures(parsedData, matchGroupTypeLookup);
+    const points = GeoJsonGenerator.generatePointFeatures(parsedData, matchGroupTypeLookup);
     output.features.push(...points);
 
     return JSON.stringify(output, null, 2);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  private generateFeatureCollection(): FeatureCollection {
+  private static generateFeatureCollection(): FeatureCollection {
     return {
       type: 'FeatureCollection',
       features: [],
     };
   }
 
-  private generatePointFeatures(
+  private static generatePointFeatures(
     parsedData: string[][],
     matchGroupTypeLookup: NumericArrayObject,
-  ): any[] {
-    const self = this;
-    return parsedData.reduce((result: any[], rowGroup) => {
+  ): PointFeature[] {
+    return parsedData.reduce((result: object[], rowGroup) => {
       const coordinate = [
         parseFloat(rowGroup[matchGroupTypeLookup.longitude[0]]),
         parseFloat(rowGroup[matchGroupTypeLookup.latitude[0]]),
@@ -45,20 +56,19 @@ export default class GeoJsonGenerator {
       if (Number.isNaN(coordinate[0]) || Number.isNaN(coordinate[1])) {
         return result;
       }
-      const properties: any = {};
-      if (self.hasTimeDefined(matchGroupTypeLookup)) {
+      const properties: Properties = {};
+      if (GeoJsonGenerator.hasTimeDefined(matchGroupTypeLookup)) {
         properties.time = rowGroup[matchGroupTypeLookup.time[0]];
       }
-      if (self.hasNameDefined(matchGroupTypeLookup)) {
+      if (GeoJsonGenerator.hasNameDefined(matchGroupTypeLookup)) {
         properties.name = rowGroup[matchGroupTypeLookup.name[0]];
       }
-      result.push(self.generatePointFeature(coordinate, properties));
+      result.push(GeoJsonGenerator.generatePointFeature(coordinate, properties));
       return result;
-    }, []);
+    }, []) as PointFeature[];
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  private generatePointFeature(coordinate: number[], properties: object) {
+  private static generatePointFeature(coordinate: number[], properties: Properties): PointFeature {
     return {
       type: 'Feature',
       properties,
@@ -72,10 +82,10 @@ export default class GeoJsonGenerator {
     };
   }
 
-  private invertMatchGroupTypes(matchGroupTypes: string[]): NumericArrayObject {
+  private static invertMatchGroupTypes(matchGroupTypes: string[]): NumericArrayObject {
     const matchGroupTypeLookup: NumericArrayObject = {};
     matchGroupTypes.forEach((value, index) => {
-      if (!this.objectHasProperty(matchGroupTypeLookup, value)) {
+      if (!GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, value)) {
         matchGroupTypeLookup[value] = [];
       }
       matchGroupTypeLookup[value].push(index);
@@ -83,21 +93,20 @@ export default class GeoJsonGenerator {
     return matchGroupTypeLookup;
   }
 
-  private hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return this.objectHasProperty(matchGroupTypeLookup, 'longitude')
-      && this.objectHasProperty(matchGroupTypeLookup, 'latitude');
+  private static hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
+    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'longitude')
+      && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'latitude');
   }
 
-  private hasTimeDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return this.objectHasProperty(matchGroupTypeLookup, 'time');
+  private static hasTimeDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
+    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'time');
   }
 
-  private hasNameDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return this.objectHasProperty(matchGroupTypeLookup, 'name');
+  private static hasNameDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
+    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'name');
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  private objectHasProperty(obj: any, prop: string): boolean {
+  private static objectHasProperty(obj: object, prop: string): boolean {
     return Object.prototype.hasOwnProperty.call(obj, prop);
   }
 }

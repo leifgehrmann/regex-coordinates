@@ -1,10 +1,10 @@
 <template>
   <v-select
-      :items="options"
-      :menu-props="{ top: true, offsetY: true }"
-      dense
-      :value="value"
-      v-on:change="update"
+    :items="options"
+    :menu-props="{ top: true, offsetY: true }"
+    dense
+    :value="value"
+    @change="update"
   />
 </template>
 
@@ -13,7 +13,12 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'MatchGroupTypeSelect',
-  props: ['value'],
+  props: {
+    value: {
+      type: String,
+      default: '',
+    },
+  },
   data: () => ({
     options: [
       { value: null, text: '' },
@@ -24,7 +29,7 @@ export default Vue.extend({
     ],
   }),
   methods: {
-    update(value: any) {
+    update(value: string): void {
       this.$emit('update:value', value);
     },
   },

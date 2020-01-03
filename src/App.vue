@@ -1,14 +1,18 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
       <v-img
-          alt="Regex-Coordinates Logo"
-          src="../public/icon-white.svg"
-          class="shrink v-responsive"
-          style="width: 32px; margin-right:16px;"
+        alt="Regex-Coordinates Logo"
+        src="../public/icon-white.svg"
+        class="shrink v-responsive"
+        style="width: 32px; margin-right:16px;"
       />
       <v-toolbar-title>Regex-Coordinates</v-toolbar-title>
-      <v-spacer/>
+      <v-spacer />
       <v-btn
         href="https://github.com/leifgehrmann/regex-coordinates"
         target="_blank"
@@ -22,14 +26,17 @@
     <v-content>
       <v-container>
         <v-flex xs12>
-          <RegexInput v-bind:value.sync="regex"/>
-          <DataInput v-bind:value.sync="data"/>
-          <MatchGroupOptions ref="matchGroupOptions" :matchGroups="matchGroups"/>
+          <RegexInput :value.sync="regex" />
+          <DataInput :value.sync="data" />
+          <MatchGroupOptions
+            ref="matchGroupOptions"
+            :match-groups="matchGroups"
+          />
         </v-flex>
       </v-container>
       <v-container>
         <v-flex xs12>
-          <GeoJsonOutput v-bind:value="geoJson"/>
+          <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
     </v-content>
@@ -47,7 +54,6 @@ import MatchGroupTransformer from '@/utils/matchGroupTransformer';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import MatchGroup from '@/utils/matchGroup';
 
-const geoJsonGenerator = new GeoJsonGenerator();
 const parser = new Parser();
 const matchGroupTransformer = new MatchGroupTransformer();
 const parsedData: string[][] = [];
@@ -63,12 +69,40 @@ export default Vue.extend({
     GeoJsonOutput,
   },
 
+  data: () => ({
+    regex: '',
+    data: '',
+    parsedData,
+    matchGroups,
+    matchGroupTypes: [],
+    geoJson: '',
+  }),
+
+  watch: {
+    regex(newVal: string): void {
+      parser.setRegexFromString(newVal);
+      this.updateParsedData();
+    },
+    data(): void {
+      this.updateParsedData();
+    },
+  },
+
   created() {
     this.initialize();
   },
+  mounted() {
+    this.$watch(
+      '$refs.matchGroupOptions.matchGroupTypes',
+      (newValue) => {
+        this.matchGroupTypes = newValue;
+        this.updateGeoJson();
+      },
+    );
+  },
 
   methods: {
-    initialize() {
+    initialize(): void {
       this.regex = '\\| ([^|]*) \\| ([^|]*) \\| ([-0-9. ]*) \\| ([-0-9. ]*) \\|';
       this.data = `+-------+---------------------+----------+-----------+
 | Name  | Arrival Time        | Latitude | Longitude |
@@ -82,42 +116,13 @@ export default Vue.extend({
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
     },
-    updateParsedData() {
+    updateParsedData(): void {
       this.parsedData = parser.parse(this.data);
       this.matchGroups = matchGroupTransformer.transform(this.parsedData);
     },
-    updateGeoJson() {
-      this.geoJson = geoJsonGenerator.generate(this.parsedData, this.matchGroupTypes);
+    updateGeoJson(): void {
+      this.geoJson = GeoJsonGenerator.generate(this.parsedData, this.matchGroupTypes);
     },
-  },
-
-  data: () => ({
-    regex: '',
-    data: '',
-    parsedData,
-    matchGroups,
-    matchGroupTypes: [],
-    geoJson: '',
-  }),
-
-  watch: {
-    regex(newVal: string) {
-      parser.setRegexFromString(newVal);
-      this.updateParsedData();
-    },
-    data() {
-      this.updateParsedData();
-    },
-  },
-  mounted() {
-    const self = this;
-    this.$watch(
-      '$refs.matchGroupOptions.matchGroupTypes',
-      (newValue) => {
-        self.matchGroupTypes = newValue;
-        self.updateGeoJson();
-      },
-    );
   },
 });
 </script>

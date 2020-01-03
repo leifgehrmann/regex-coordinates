@@ -5,7 +5,7 @@ export default class Parser {
     this.regex = null;
   }
 
-  public setRegexFromString(regexString: string) {
+  public setRegexFromString(regexString: string): void {
     try {
       this.regex = new RegExp(regexString, 'gm');
     } catch {
@@ -14,22 +14,11 @@ export default class Parser {
   }
 
   public parse(data: string): string[][] {
-    const allMatches:string[][] = [];
+    const allMatches: string[][] = [];
     if (this.regex === null) {
       return allMatches;
     }
 
-    let matches;
-    // eslint-disable-next-line no-cond-assign
-    while ((matches = this.regex.exec(data)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (matches.index === this.regex.lastIndex) {
-        this.regex.lastIndex += 1;
-      }
-
-      allMatches.push(matches);
-    }
-
-    return allMatches;
+    return Array.from(data.matchAll(this.regex));
   }
 }

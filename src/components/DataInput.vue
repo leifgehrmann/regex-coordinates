@@ -1,11 +1,12 @@
 <template>
   <v-textarea
-      name="data"
-      label="Data"
-      auto-grow
-      solo
-      :value.sync="value"
-      v-on:input="update"/>
+    name="data"
+    label="Data"
+    auto-grow
+    solo
+    :value.sync="value"
+    @input="update"
+  />
 </template>
 
 <script lang="ts">
@@ -13,9 +14,14 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'DataInput',
-  props: ['value'],
+  props: {
+    value: {
+      type: String,
+      default: '',
+    },
+  },
   methods: {
-    update(value: any) {
+    update(value: string): void {
       this.$emit('update:value', value);
     },
   },

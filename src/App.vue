@@ -28,6 +28,10 @@
         <v-flex xs12>
           <RegexInput :value.sync="regex" />
           <DataInput :value.sync="data" />
+          <GroupSettingsTable
+            :regex="regex"
+            :matches="matchGroups"
+          />
           <MatchGroupOptions
             ref="matchGroupOptions"
             :match-groups="matchGroups"
@@ -47,6 +51,7 @@
 import Vue from 'vue';
 import RegexInput from './components/RegexInput.vue';
 import DataInput from './components/DataInput.vue';
+import GroupSettingsTable from './components/GroupSettingsTable.vue';
 import MatchGroupOptions from './components/MatchGroupOptions.vue';
 import GeoJsonOutput from './components/GeoJsonOutput.vue';
 import Parser from '@/utils/parser';
@@ -65,6 +70,7 @@ export default Vue.extend({
   components: {
     RegexInput,
     DataInput,
+    GroupSettingsTable,
     MatchGroupOptions,
     GeoJsonOutput,
   },
@@ -75,6 +81,7 @@ export default Vue.extend({
     parsedData,
     matchGroups,
     matchGroupTypes: [],
+    groupSettings: [],
     geoJson: '',
   }),
 

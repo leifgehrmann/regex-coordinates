@@ -1,0 +1,103 @@
+<template>
+  <table>
+    <tr>
+      <th>Group Number</th>
+      <th>Type</th>
+    </tr>
+    <tr
+      v-for="item in items"
+      :key="item.groupNumber"
+      :item="item"
+      :index="index"
+    >
+      <td>{{ item.groupNumber }}</td>
+      <td><MatchGroupTypeSelect
+        :value.sync="item.groupSettings.type"
+      /></td>
+    </tr>
+  </table>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import MatchGroupTypeSelect from '@/components/MatchGroupTypeSelect.vue';
+
+interface GroupSettings {
+  type?: string;
+}
+
+interface Item {
+  groupNumber: number;
+  groupSettings: GroupSettings;
+}
+
+const items: Item[] = [];
+
+function getNumberOfRegexCaptureGroups(regexString: string): number {
+  try {
+    // We can trick regex by passing in an alternative which matches blank
+    // which will tell us the actual number of capture groups there are. ;)
+    const regex = new RegExp(`${regexString}|`);
+    const result = regex.exec('');
+    if (result === null) {
+      return 0;
+    }
+    return result.length - 1;
+  } catch (e) {
+    return 0;
+  }
+}
+
+export default Vue.extend({
+  name: 'GroupSettingsTable',
+  components: {
+    MatchGroupTypeSelect,
+  },
+  props: {
+    regex: {
+      type: String,
+      default: (): string => '',
+    },
+    matches: {
+      type: Array,
+      default: (): string[][] => [],
+    },
+    groupSettings: {
+      type: Array,
+      default: (): GroupSettings[] => [],
+    },
+  },
+  data: () => ({
+    items,
+  }),
+  watch: {
+    $props: {
+      deep: true,
+      immediate: true,
+      handler(): void {
+        const numberOfGroups = getNumberOfRegexCaptureGroups(this.regex);
+
+        // If the array is too long...
+        if (this.items.length > numberOfGroups) {
+          this.items = this.items.slice(0, numberOfGroups);
+        }
+
+        // If the array is too short...
+        if (this.items.length < numberOfGroups) {
+          for (let i = this.items.length; i < numberOfGroups; i += 1) {
+            const groupNumber = i + 1;
+            this.items.push({
+              groupNumber,
+              groupSettings: {},
+            });
+          }
+        }
+      },
+    },
+  },
+});
+</script>
+
+<style scoped>
+
+</style>

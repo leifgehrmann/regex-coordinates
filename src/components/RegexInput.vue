@@ -3,7 +3,6 @@
     auto-grow
     solo
     name="regex"
-    label="Regex"
     rows="1"
     :value.sync="value"
     @input="update"

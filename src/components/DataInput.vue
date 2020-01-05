@@ -1,7 +1,6 @@
 <template>
   <v-textarea
     name="data"
-    label="Data"
     auto-grow
     solo
     :value.sync="value"

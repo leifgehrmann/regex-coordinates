@@ -1,3 +1,5 @@
+import GroupSettings from '@/utils/groupSettings';
+
 type NumericArrayObject = { [key: string]: number[] };
 
 interface FeatureCollection {
@@ -19,19 +21,19 @@ interface PointFeature {
 }
 
 export default class GeoJsonGenerator {
-  static generate(parsedData: string[][], matchGroupTypes: string[]): string {
-    const matchGroupTypeLookup = GeoJsonGenerator.invertMatchGroupTypes(matchGroupTypes);
+  static generate(parsedData: string[][], allGroupSettings: GroupSettings[]): string {
+    const groupNumberLookupByType = GeoJsonGenerator.getGroupNumberLookupByType(allGroupSettings);
     const output = GeoJsonGenerator.generateFeatureCollection();
 
-    if (!GeoJsonGenerator.hasCoordinatesDefined(matchGroupTypeLookup)) {
+    if (!GeoJsonGenerator.hasCoordinatesDefined(groupNumberLookupByType)) {
       return 'Please select Latitude and Longitude groups above.';
     }
 
-    if (GeoJsonGenerator.hasTimeDefined(matchGroupTypeLookup)) {
+    if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
       // Todo: Add linestring feature
     }
 
-    const points = GeoJsonGenerator.generatePointFeatures(parsedData, matchGroupTypeLookup);
+    const points = GeoJsonGenerator.generatePointFeatures(parsedData, groupNumberLookupByType);
     output.features.push(...points);
 
     return JSON.stringify(output, null, 2);
@@ -46,22 +48,22 @@ export default class GeoJsonGenerator {
 
   private static generatePointFeatures(
     parsedData: string[][],
-    matchGroupTypeLookup: NumericArrayObject,
+    groupNumberLookupByType: NumericArrayObject,
   ): PointFeature[] {
     return parsedData.reduce((result: object[], rowGroup) => {
       const coordinate = [
-        parseFloat(rowGroup[matchGroupTypeLookup.longitude[0]]),
-        parseFloat(rowGroup[matchGroupTypeLookup.latitude[0]]),
+        parseFloat(rowGroup[groupNumberLookupByType.longitude[0] + 1]),
+        parseFloat(rowGroup[groupNumberLookupByType.latitude[0] + 1]),
       ];
       if (Number.isNaN(coordinate[0]) || Number.isNaN(coordinate[1])) {
         return result;
       }
       const properties: Properties = {};
-      if (GeoJsonGenerator.hasTimeDefined(matchGroupTypeLookup)) {
-        properties.time = rowGroup[matchGroupTypeLookup.time[0]];
+      if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
+        properties.time = rowGroup[groupNumberLookupByType.time[0] + 1];
       }
-      if (GeoJsonGenerator.hasNameDefined(matchGroupTypeLookup)) {
-        properties.name = rowGroup[matchGroupTypeLookup.name[0]];
+      if (GeoJsonGenerator.hasNameDefined(groupNumberLookupByType)) {
+        properties.name = rowGroup[groupNumberLookupByType.name[0] + 1];
       }
       result.push(GeoJsonGenerator.generatePointFeature(coordinate, properties));
       return result;
@@ -82,15 +84,18 @@ export default class GeoJsonGenerator {
     };
   }
 
-  private static invertMatchGroupTypes(matchGroupTypes: string[]): NumericArrayObject {
-    const matchGroupTypeLookup: NumericArrayObject = {};
-    matchGroupTypes.forEach((value, index) => {
-      if (!GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, value)) {
-        matchGroupTypeLookup[value] = [];
+  private static getGroupNumberLookupByType(allGroupSettings: GroupSettings[]): NumericArrayObject {
+    const groupNumberLookupByType: NumericArrayObject = {};
+    allGroupSettings.forEach((groupSettings, groupNumber) => {
+      if (groupSettings.type === null) {
+        return;
       }
-      matchGroupTypeLookup[value].push(index);
+      if (!GeoJsonGenerator.objectHasProperty(groupNumberLookupByType, groupSettings.type)) {
+        groupNumberLookupByType[groupSettings.type] = [];
+      }
+      groupNumberLookupByType[groupSettings.type].push(groupNumber);
     });
-    return matchGroupTypeLookup;
+    return groupNumberLookupByType;
   }
 
   private static hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {

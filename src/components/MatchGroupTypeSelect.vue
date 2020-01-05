@@ -1,11 +1,13 @@
 <template>
-  <v-select
-    :items="options"
-    :menu-props="{ top: true, offsetY: true }"
-    dense
-    :value="value"
-    @change="update"
-  />
+  <div>
+    <v-select
+      :items="options"
+      :menu-props="{ top: true, offsetY: true }"
+      dense
+      :value="value"
+      @change="update"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -35,3 +37,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+div {
+  max-width: 270px;
+}
+</style>

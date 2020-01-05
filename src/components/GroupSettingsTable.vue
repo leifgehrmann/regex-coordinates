@@ -8,12 +8,14 @@
       v-for="item in items"
       :key="item.groupNumber"
       :item="item"
-      :index="index"
+      :index="item.groupNumber"
     >
       <td>{{ item.groupNumber }}</td>
-      <td><MatchGroupTypeSelect
-        :value.sync="item.groupSettings.type"
-      /></td>
+      <td>
+        <MatchGroupTypeSelect
+          :value.sync="item.groupSettings.type"
+        />
+      </td>
     </tr>
   </table>
 </template>
@@ -23,8 +25,10 @@ import Vue from 'vue';
 import MatchGroupTypeSelect from '@/components/MatchGroupTypeSelect.vue';
 
 interface GroupSettings {
-  type?: string;
+  type: string|null;
 }
+
+type GroupSettingsArray = GroupSettings[];
 
 interface Item {
   groupNumber: number;
@@ -62,8 +66,8 @@ export default Vue.extend({
       type: Array,
       default: (): string[][] => [],
     },
-    groupSettings: {
-      type: Array,
+    allGroupSettings: {
+      type: Array as () => GroupSettingsArray,
       default: (): GroupSettings[] => [],
     },
   },
@@ -73,7 +77,6 @@ export default Vue.extend({
   watch: {
     $props: {
       deep: true,
-      immediate: true,
       handler(): void {
         const numberOfGroups = getNumberOfRegexCaptureGroups(this.regex);
 
@@ -86,13 +89,31 @@ export default Vue.extend({
         if (this.items.length < numberOfGroups) {
           for (let i = this.items.length; i < numberOfGroups; i += 1) {
             const groupNumber = i + 1;
+            let groupSettings: GroupSettings = {
+              type: null,
+            };
+            if (this.allGroupSettings.length > i) {
+              groupSettings = this.allGroupSettings[i];
+            }
             this.items.push({
               groupNumber,
-              groupSettings: {},
+              groupSettings,
             });
           }
         }
       },
+    },
+    items: {
+      handler(updatedItems: Item[]): void {
+        updatedItems.forEach((updatedItem, index) => {
+          if (this.allGroupSettings.length < 0) {
+            this.allGroupSettings.push(updatedItem.groupSettings);
+          } else {
+            this.allGroupSettings[index] = updatedItem.groupSettings;
+          }
+        });
+      },
+      deep: true,
     },
   },
 });

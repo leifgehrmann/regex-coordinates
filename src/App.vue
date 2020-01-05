@@ -26,12 +26,16 @@
     <v-content>
       <v-container>
         <v-flex xs12>
+          <h2>Regex</h2>
           <RegexInput :value.sync="regex" />
-          <DataInput :value.sync="data" />
+          <h2>Group Settings</h2>
           <GroupSettingsTable
             :regex="regex"
             :matches="matchGroups"
+            :all-group-settings="allGroupSettings"
           />
+          <h2>Data</h2>
+          <DataInput :value.sync="data" />
           <MatchGroupOptions
             ref="matchGroupOptions"
             :match-groups="matchGroups"
@@ -40,6 +44,7 @@
       </v-container>
       <v-container>
         <v-flex xs12>
+          <h2>Output</h2>
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
@@ -58,11 +63,13 @@ import Parser from '@/utils/parser';
 import MatchGroupTransformer from '@/utils/matchGroupTransformer';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import MatchGroup from '@/utils/matchGroup';
+import GroupSettings from '@/utils/groupSettings';
 
 const parser = new Parser();
 const matchGroupTransformer = new MatchGroupTransformer();
 const parsedData: string[][] = [];
 const matchGroups: MatchGroup[] = [];
+const allGroupSettings: GroupSettings[] = [];
 
 export default Vue.extend({
   name: 'App',
@@ -81,7 +88,7 @@ export default Vue.extend({
     parsedData,
     matchGroups,
     matchGroupTypes: [],
-    groupSettings: [],
+    allGroupSettings,
     geoJson: '',
   }),
 
@@ -122,6 +129,12 @@ export default Vue.extend({
 | Bob   | 2020-03-22T19:26:42 | 56.11799 | -3.93653  |
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
+      this.allGroupSettings = [
+        { type: null },
+        { type: null },
+        { type: 'latitude' },
+        { type: 'longitude' },
+      ];
     },
     updateParsedData(): void {
       this.parsedData = parser.parse(this.data);

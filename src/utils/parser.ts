@@ -21,4 +21,14 @@ export default class Parser {
 
     return Array.from(data.matchAll(this.regex));
   }
+
+  // @todo: Do not leave like this
+  public parse2(data: string): RegExpMatchArray[] {
+    const allMatches: string[][] = [];
+    if (this.regex === null) {
+      return allMatches;
+    }
+
+    return Array.from(data.matchAll(this.regex));
+  }
 }

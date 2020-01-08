@@ -1,6 +1,10 @@
 <template>
   <div>
-    <code-mirror />
+    <code-mirror
+      :value.sync="value2"
+      :regex-string="regexString"
+      @input="update2"
+    />
     <v-textarea
       name="data"
       auto-grow
@@ -21,7 +25,15 @@ export default Vue.extend({
     CodeMirror,
   },
   props: {
+    regexString: {
+      type: String,
+      default: '',
+    },
     value: {
+      type: String,
+      default: '',
+    },
+    value2: {
       type: String,
       default: '',
     },
@@ -29,6 +41,9 @@ export default Vue.extend({
   methods: {
     update(value: string): void {
       this.$emit('update:value', value);
+    },
+    update2(value2: string): void {
+      this.$emit('update:value2', value2);
     },
   },
 });

@@ -41,7 +41,11 @@
           <RegexInput :value.sync="regex" />
 
           <h2>Step 2. Input data</h2>
-          <DataInput :value.sync="data" />
+          <DataInput
+            :regex-string="regex"
+            :value.sync="data"
+            :value2.sync="data2"
+          />
 
           <h2>Step 3. Capture Group Settings</h2>
           <p class="body-2">
@@ -95,6 +99,7 @@ export default Vue.extend({
   data: () => ({
     regex: '',
     data: '',
+    data2: '',
     parsedData,
     allMatchGroupsResult,
     allGroupSettings,
@@ -135,6 +140,7 @@ export default Vue.extend({
 | Bob   | 2020-03-22T19:26:42 | 56.11799 | -3.93653  |
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
+      this.data2 = this.data;
       this.allGroupSettings = [
         { type: null },
         { type: null },

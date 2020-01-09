@@ -5,6 +5,7 @@
       :regex-string="regexString"
       @input="update2"
     />
+    <div class="spacing" />
     <v-textarea
       name="data"
       auto-grow
@@ -52,5 +53,11 @@ export default Vue.extend({
 <style>
   textarea {
     font-family: monospace !important;
+  }
+</style>
+
+<style scoped>
+  .spacing {
+    margin-bottom: 20px;
   }
 </style>

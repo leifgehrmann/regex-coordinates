@@ -85,6 +85,17 @@ export default Vue.extend({
       this.codeMirrorContent = instance.getValue();
       this.$emit('input', this.codeMirrorContent);
     });
+    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQueryList.addListener((event) => {
+      if (codeMirror === null) {
+        return;
+      }
+      const theme = event.matches ? 'material-darker' : 'default';
+      codeMirror.setOption('theme', theme);
+    });
+    const theme = mediaQueryList.matches ? 'material-darker' : 'default';
+    codeMirror.setOption('theme', theme);
+
     parser.setRegexFromString(this.regexString);
     highlightMatches(this.value);
   },
@@ -97,11 +108,34 @@ export default Vue.extend({
 });
 </script>
 
+<style scoped>
+div {
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+</style>
+
 <style>
+.CodeMirror.cm-s-default {
+  border-radius: 4px;
+}
+
 .match-group-highlight-0 {
-  background-color: #044;
+  background-color: rgba(116,196,255,1);
 }
 .match-group-highlight-1 {
-  background-color: #033;
+  background-color: rgba(198,227,255,1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .match-group-highlight-0 {
+    background-color: rgba(5, 51, 93, 1);
+  }
+
+  .match-group-highlight-1 {
+    background-color: rgba(8, 75, 140, 1);
+  }
 }
 </style>

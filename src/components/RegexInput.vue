@@ -48,7 +48,7 @@ export default Vue.extend({
         return;
       }
       this.codeMirror.on('change', (instance) => {
-        this.$emit('input', instance.getValue());
+        this.$emit('update:value', instance.getValue());
       });
     },
     initializeColorSchemeEventHandler(mediaQueryList: MediaQueryList): void {

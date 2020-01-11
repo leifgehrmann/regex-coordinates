@@ -72,9 +72,6 @@ export default Vue.extend({
     },
     initializeColorSchemeEventHandler(mediaQueryList: MediaQueryList): void {
       mediaQueryList.addListener((mediaQueryListEvent) => {
-        if (this.codeMirror === null) {
-          return;
-        }
         this.updateTheme(mediaQueryListEvent);
       });
     },

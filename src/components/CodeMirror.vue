@@ -25,7 +25,7 @@ function highlightMatches(value: string): void {
     return;
   }
   const doc = codeMirror.getDoc();
-  parser.parse2(value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
+  parser.parse(value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
     if (codeMirror === null) {
       return;
     }

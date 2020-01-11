@@ -101,7 +101,7 @@ export default Vue.extend({
         return;
       }
       const doc = this.codeMirror.getDoc();
-      this.parser.parse2(this.value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
+      this.parser.parse(this.value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
         if (this.codeMirror === null) {
           return;
         }

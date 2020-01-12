@@ -11,6 +11,7 @@ import Vue from 'vue';
 import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
+import { debounce } from 'debounce';
 import regExpParser from '@/utils/regExpParser';
 import RegExpToken from '@/utils/regExpToken';
 
@@ -23,12 +24,15 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    valueWatchEventHandler: (): void => {
+      // do nothing.
+    },
     codeMirror: null as EditorFromTextArea|null,
     codeMirrorTextMarkers: [] as CodeMirror.TextMarker[],
   }),
   watch: {
     value(): void {
-      this.updateHighlighting();
+      this.valueWatchEventHandler();
     },
   },
   mounted() {
@@ -52,6 +56,9 @@ export default Vue.extend({
       this.initializeColorSchemeEventHandler(colorSchemeMediaQueryList);
       this.updateTheme(colorSchemeMediaQueryList);
       this.updateHighlighting();
+      this.valueWatchEventHandler = debounce(() => {
+        this.updateHighlighting();
+      }, 100);
     },
     initializeChangeEventHandler(): void {
       if (this.codeMirror === null) {

@@ -47,6 +47,7 @@ export default Vue.extend({
           lineNumbers: false,
           theme: 'default',
           lineWrapping: true,
+          mode: 'none',
         },
       );
       this.codeMirror.setValue(this.value);

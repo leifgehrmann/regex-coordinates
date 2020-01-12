@@ -50,6 +50,7 @@ export default Vue.extend({
           value: `${this.value}`,
           lineNumbers: true,
           theme: 'default',
+          mode: 'none',
         },
       );
       this.codeMirror.setValue(this.value);

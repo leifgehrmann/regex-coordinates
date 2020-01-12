@@ -78,6 +78,12 @@ div {
   padding: 4px;
   background: #FFFFFF;
 }
+
+@media (prefers-color-scheme: dark) {
+  div {
+    background: #212121;
+  }
+}
 </style>
 
 <style>

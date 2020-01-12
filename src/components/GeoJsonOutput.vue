@@ -82,5 +82,12 @@ div {
 <style>
 .CodeMirror.cm-s-default {
   border-radius: 4px;
+  height: auto;
+  max-height: 50vh;
+}
+
+.CodeMirror-scroll {
+  height: auto;
+  max-height: 50vh;
 }
 </style>

@@ -13,7 +13,7 @@ export default class Parser {
     }
   }
 
-  public parse(data: string): string[][] {
+  public parse(data: string): RegExpMatchArray[] {
     const allMatches: string[][] = [];
     if (this.regex === null) {
       return allMatches;

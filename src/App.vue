@@ -41,7 +41,10 @@
           <RegexInput :value.sync="regex" />
 
           <h2>Step 2. Input data</h2>
-          <DataInput :value.sync="data" />
+          <DataInput
+            :regex-string="regex"
+            :value.sync="data"
+          />
 
           <h2>Step 3. Capture Group Settings</h2>
           <p class="body-2">
@@ -77,11 +80,6 @@ import Parser from '@/utils/parser';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
 
-const parser = new Parser();
-const parsedData: string[][] = [];
-const allMatchGroupsResult: string[][] = [];
-const allGroupSettings: GroupSettings[] = [];
-
 export default Vue.extend({
   name: 'App',
 
@@ -95,15 +93,16 @@ export default Vue.extend({
   data: () => ({
     regex: '',
     data: '',
-    parsedData,
-    allMatchGroupsResult,
-    allGroupSettings,
+    parser: new Parser(),
+    parsedData: [] as RegExpMatchArray[],
+    allMatchGroupsResult: [] as string[][],
+    allGroupSettings: [] as GroupSettings[],
     geoJson: '',
   }),
 
   watch: {
     regex(newVal: string): void {
-      parser.setRegexFromString(newVal);
+      this.parser.setRegexFromString(newVal);
       this.updateEverything();
     },
     data(): void {
@@ -143,7 +142,7 @@ export default Vue.extend({
       ];
     },
     updateEverything(): void {
-      this.parsedData = parser.parse(this.data);
+      this.parsedData = this.parser.parse(this.data);
       this.allMatchGroupsResult = this.parsedData;
       this.geoJson = GeoJsonGenerator.generate(this.parsedData, this.allGroupSettings);
     },

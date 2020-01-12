@@ -227,8 +227,10 @@ div {
 .regexp-token-highlight-range {
   background: #F70;
 }
+.regexp-token-highlight-literal-escaped {
+  background: #CCC;
+}
 .regexp-token-highlight-alternate,
-.regexp-token-highlight-literal-escaped,
 .regexp-token-highlight-tab,
 .regexp-token-highlight-start,
 .regexp-token-highlight-end,
@@ -269,8 +271,10 @@ div {
   .regexp-token-highlight-range {
     background: #520;
   }
+  .regexp-token-highlight-literal-escaped {
+    background: #444;
+  }
   .regexp-token-highlight-alternate,
-  .regexp-token-highlight-literal-escaped,
   .regexp-token-highlight-tab,
   .regexp-token-highlight-start,
   .regexp-token-highlight-end,

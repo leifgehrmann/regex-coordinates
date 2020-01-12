@@ -91,6 +91,7 @@ export default Vue.extend({
       this.textMarkers.forEach((textMarker) => {
         textMarker.clear();
       });
+      this.textMarkers = [];
     },
     updateHighlightMatches(): void {
       this.clearHighlightMatches();

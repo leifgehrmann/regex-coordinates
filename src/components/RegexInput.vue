@@ -11,6 +11,8 @@ import Vue from 'vue';
 import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
+import regExpParser from '@/utils/regExpParser';
+import RegExpToken from '@/utils/regExpToken';
 
 export default Vue.extend({
   name: 'RegexInput',
@@ -22,7 +24,13 @@ export default Vue.extend({
   },
   data: () => ({
     codeMirror: null as EditorFromTextArea|null,
+    codeMirrorTextMarkers: [] as CodeMirror.TextMarker[],
   }),
+  watch: {
+    value(): void {
+      this.updateHighlighting();
+    },
+  },
   mounted() {
     this.initialize();
   },
@@ -34,6 +42,7 @@ export default Vue.extend({
           value: `${this.value}`,
           lineNumbers: false,
           theme: 'default',
+          lineWrapping: true,
         },
       );
       this.codeMirror.setValue(this.value);
@@ -42,6 +51,7 @@ export default Vue.extend({
       const colorSchemeMediaQueryList = this.getColorSchemeMediaQueryList();
       this.initializeColorSchemeEventHandler(colorSchemeMediaQueryList);
       this.updateTheme(colorSchemeMediaQueryList);
+      this.updateHighlighting();
     },
     initializeChangeEventHandler(): void {
       if (this.codeMirror === null) {
@@ -64,6 +74,111 @@ export default Vue.extend({
     },
     getColorSchemeMediaQueryList(): MediaQueryList {
       return window.matchMedia('(prefers-color-scheme: dark)');
+    },
+    validateRegexString(): boolean {
+      try {
+        // Note, the value here is a backslash escaped regex string.
+        // @todo: Force the user to enter a non-escaped regex string. E.g. "\/" -> "/"
+        return new RegExp(this.value).toString()
+          .slice(1, -1) === this.value;
+      } catch (e) {
+        return false;
+      }
+    },
+    clearTextMarkers(): void {
+      this.codeMirrorTextMarkers.forEach((textMarker) => {
+        textMarker.clear();
+      });
+      this.codeMirrorTextMarkers = [];
+    },
+    updateHighlighting(): void {
+      this.clearTextMarkers();
+      if (!this.validateRegexString()) {
+        return;
+      }
+      let regExpTokens = [];
+      try {
+        regExpTokens = regExpParser(this.value);
+      } catch (e) {
+        return;
+      }
+
+      if (this.codeMirror === null) {
+        return;
+      }
+      const doc = this.codeMirror.getDoc();
+      regExpTokens.forEach((regExpToken) => {
+        if (this.codeMirror === null) {
+          return;
+        }
+
+        if (
+          regExpToken.type === 'literal'
+          || regExpToken.type === 'match'
+        ) {
+          return;
+        }
+
+        if (
+          regExpToken.type === 'capture-group'
+          || regExpToken.type === 'non-capture-group'
+          || regExpToken.type === 'positive-lookahead'
+          || regExpToken.type === 'negative-lookahead'
+          || regExpToken.type === 'non-capture-group'
+        ) {
+          const textMarkers = this.addTextMarkerForBraces(this.codeMirror, doc, regExpToken);
+          this.codeMirrorTextMarkers.push(...textMarkers);
+        } else {
+          const textMarker = this.addTextMarkerForRange(this.codeMirror, doc, regExpToken);
+          this.codeMirrorTextMarkers.push(textMarker);
+        }
+      });
+    },
+    addTextMarkerForRange(
+      codeMirror: CodeMirror.EditorFromTextArea,
+      doc: CodeMirror.Doc,
+      regExpToken: RegExpToken,
+    ): CodeMirror.TextMarker {
+      return codeMirror.markText(
+        doc.posFromIndex(regExpToken.indexStart),
+        doc.posFromIndex(regExpToken.indexEnd),
+        {
+          className: `regexp-token-highlight-${regExpToken.type}`,
+        },
+      );
+    },
+    addTextMarkerForBraces(
+      codeMirror: CodeMirror.EditorFromTextArea,
+      doc: CodeMirror.Doc,
+      regExpToken: RegExpToken,
+    ): CodeMirror.TextMarker[] {
+      const { indexStart, indexEnd, type } = regExpToken;
+      let offset = 0;
+      if (
+        regExpToken.type === 'positive-lookahead'
+        || regExpToken.type === 'negative-lookahead'
+      ) {
+        offset = 2;
+      }
+      return [
+        this.addTextMarker(codeMirror, doc, indexStart - 1, indexStart + offset, type),
+        this.addTextMarker(codeMirror, doc, indexEnd, indexEnd + 1, type),
+      ];
+    },
+    addTextMarker(
+      codeMirror: CodeMirror.EditorFromTextArea,
+      doc: CodeMirror.Doc,
+      indexStart: number,
+      indexEnd: number,
+      type: string,
+    ): CodeMirror.TextMarker {
+      return codeMirror.markText(
+        doc.posFromIndex(indexStart),
+        doc.posFromIndex(indexEnd),
+        {
+          className: `regexp-token-highlight-${type}`,
+        },
+      );
     },
   },
 });
@@ -90,8 +205,88 @@ div {
 .CodeMirror {
   height: auto;
 }
-
-textarea {
-  font-family: monospace !important;
+.regexp-token-highlight-quantifier {
+  background: #0FD;
 }
+.regexp-token-highlight-capture-group,
+.regexp-token-highlight-positive-lookahead,
+.regexp-token-highlight-negative-lookahead,
+.regexp-token-highlight-non-capture-group {
+  background: #0F0;
+}
+.regexp-token-highlight-charset {
+  background: #F90;
+}
+.regexp-token-highlight-range {
+  background: #F70;
+}
+.regexp-token-highlight-alternate,
+.regexp-token-highlight-literal-escaped,
+.regexp-token-highlight-tab,
+.regexp-token-highlight-start,
+.regexp-token-highlight-end,
+.regexp-token-highlight-white-space,
+.regexp-token-highlight-non-white-space,
+.regexp-token-highlight-digit,
+.regexp-token-highlight-non-digit,
+.regexp-token-highlight-word,
+.regexp-token-highlight-non-word,
+.regexp-token-highlight-any-character,
+.regexp-token-highlight-word-boundary,
+.regexp-token-highlight-non-word-boundary,
+.regexp-token-highlight-vertical-tab,
+.regexp-token-highlight-line-feed,
+.regexp-token-highlight-hex,
+.regexp-token-highlight-back-reference,
+.regexp-token-highlight-control-character,
+.regexp-token-highlight-backspace,
+.regexp-token-highlight-carriage-return,
+.regexp-token-highlight-null-character,
+.regexp-token-highlight-unicode {
+  background: #5BF;
+}
+
+@media (prefers-color-scheme: dark) {
+  .regexp-token-highlight-quantified {
+    background: #055;
+  }
+  .regexp-token-highlight-capture-group,
+  .regexp-token-highlight-positive-lookahead,
+  .regexp-token-highlight-negative-lookahead,
+  .regexp-token-highlight-non-capture-group {
+    background: #050;
+  }
+  .regexp-token-highlight-charset {
+    background: #530;
+  }
+  .regexp-token-highlight-range {
+    background: #520;
+  }
+  .regexp-token-highlight-alternate,
+  .regexp-token-highlight-literal-escaped,
+  .regexp-token-highlight-tab,
+  .regexp-token-highlight-start,
+  .regexp-token-highlight-end,
+  .regexp-token-highlight-white-space,
+  .regexp-token-highlight-non-white-space,
+  .regexp-token-highlight-digit,
+  .regexp-token-highlight-non-digit,
+  .regexp-token-highlight-word,
+  .regexp-token-highlight-non-word,
+  .regexp-token-highlight-any-character,
+  .regexp-token-highlight-word-boundary,
+  .regexp-token-highlight-non-word-boundary,
+  .regexp-token-highlight-vertical-tab,
+  .regexp-token-highlight-line-feed,
+  .regexp-token-highlight-hex,
+  .regexp-token-highlight-back-reference,
+  .regexp-token-highlight-control-character,
+  .regexp-token-highlight-backspace,
+  .regexp-token-highlight-carriage-return,
+  .regexp-token-highlight-null-character,
+  .regexp-token-highlight-unicode {
+    background: #035;
+  }
+}
+
 </style>

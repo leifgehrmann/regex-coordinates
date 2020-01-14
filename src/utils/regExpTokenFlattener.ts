@@ -1,4 +1,4 @@
-import regexp, {
+import {
   Token,
   Alternate,
   Match,
@@ -10,9 +10,9 @@ import regexp, {
   Charset,
   Literal,
 } from 'regexp';
-import RegExpToken from '@/utils/regExpToken';
+import RegExpFlatToken from '@/utils/regExpFlatToken';
 
-function createToken(token: Token): RegExpToken {
+function createToken(token: Token): RegExpFlatToken {
   let { type, text } = token;
   let indexStart = token.offset;
   let indexEnd = token.offset + token.text.length;
@@ -35,7 +35,7 @@ function createToken(token: Token): RegExpToken {
   };
 }
 
-function flattenTokens(token: Token): RegExpToken[] {
+function flattenTokens(token: Token): RegExpFlatToken[] {
   const regExpTokens = [];
   regExpTokens.push(createToken(token));
   if (token.type === 'alternate') {
@@ -63,7 +63,6 @@ function flattenTokens(token: Token): RegExpToken[] {
   return regExpTokens;
 }
 
-export default function parseRegExp(regexString: string): RegExpToken[] {
-  const nestedTokens = regexp(regexString);
-  return flattenTokens(nestedTokens);
+export default function regExpTokenFlattener(token: Token): RegExpFlatToken[] {
+  return flattenTokens(token);
 }

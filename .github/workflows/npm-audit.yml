@@ -1,6 +1,9 @@
 name: NPM Audit
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 6 * * 1'
 

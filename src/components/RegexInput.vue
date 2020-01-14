@@ -1,8 +1,16 @@
 <template>
   <div>
-    <textarea
-      ref="textarea"
-    />
+    <div class="codemirror-container">
+      <textarea
+        ref="textarea"
+      />
+    </div>
+    <div
+      class="validation"
+      :class="{ 'validation-has-errors': error }"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -12,8 +20,10 @@ import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
 import { debounce } from 'debounce';
-import regExpParser from '@/utils/regExpParser';
-import RegExpToken from '@/utils/regExpToken';
+import regExpParser, { Token } from 'regexp';
+import regExpTokenFlattener from '@/utils/regExpTokenFlattener';
+import RegExpFlatToken from '@/utils/regExpFlatToken';
+import RegExpUnescape from '@/utils/regExpUnescape';
 
 export default Vue.extend({
   name: 'RegexInput',
@@ -22,8 +32,13 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    error: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
+    errorMessage: 'Hello!',
     valueWatchEventHandler: (): void => {
       // do nothing.
     },
@@ -56,9 +71,9 @@ export default Vue.extend({
       const colorSchemeMediaQueryList = this.getColorSchemeMediaQueryList();
       this.initializeColorSchemeEventHandler(colorSchemeMediaQueryList);
       this.updateTheme(colorSchemeMediaQueryList);
-      this.updateHighlighting();
+      this.update();
       this.valueWatchEventHandler = debounce(() => {
-        this.updateHighlighting();
+        this.update();
       }, 100);
     },
     initializeChangeEventHandler(): void {
@@ -83,15 +98,27 @@ export default Vue.extend({
     getColorSchemeMediaQueryList(): MediaQueryList {
       return window.matchMedia('(prefers-color-scheme: dark)');
     },
-    validateRegexString(): boolean {
+    update(): void {
+      let regExpTokens = null;
       try {
-        // Note, the value here is a backslash escaped regex string.
-        // @todo: Force the user to enter a non-escaped regex string. E.g. "\/" -> "/"
-        return new RegExp(this.value).toString()
-          .slice(1, -1) === this.value;
+        regExpTokens = regExpParser(this.value);
+        this.updateHighlighting(regExpTokens);
       } catch (e) {
-        return false;
+        this.errorMessage = '';
+        this.clearTextMarkers();
+        try {
+          RegExp(RegExpUnescape.unescape(this.value));
+        } catch (e2) {
+          this.errorMessage = e2.toString().replace(/^[^:]*:/, '');
+        }
+        if (this.errorMessage === '') {
+          this.errorMessage = e.toString();
+        }
+        this.$emit('update:error', true);
+        return;
       }
+      this.errorMessage = '';
+      this.$emit('update:error', false);
     },
     clearTextMarkers(): void {
       this.codeMirrorTextMarkers.forEach((textMarker) => {
@@ -99,45 +126,37 @@ export default Vue.extend({
       });
       this.codeMirrorTextMarkers = [];
     },
-    updateHighlighting(): void {
+    updateHighlighting(regExpToken: Token): void {
       this.clearTextMarkers();
-      if (!this.validateRegexString()) {
-        return;
-      }
-      let regExpTokens = [];
-      try {
-        regExpTokens = regExpParser(this.value);
-      } catch (e) {
-        return;
-      }
+      const regExpFlatTokens = regExpTokenFlattener(regExpToken);
 
       if (this.codeMirror === null) {
         return;
       }
       const doc = this.codeMirror.getDoc();
-      regExpTokens.forEach((regExpToken) => {
+      regExpFlatTokens.forEach((regExpFlatToken) => {
         if (this.codeMirror === null) {
           return;
         }
 
         if (
-          regExpToken.type === 'literal'
-          || regExpToken.type === 'match'
+          regExpFlatToken.type === 'literal'
+          || regExpFlatToken.type === 'match'
         ) {
           return;
         }
 
         if (
-          regExpToken.type === 'capture-group'
-          || regExpToken.type === 'non-capture-group'
-          || regExpToken.type === 'positive-lookahead'
-          || regExpToken.type === 'negative-lookahead'
-          || regExpToken.type === 'non-capture-group'
+          regExpFlatToken.type === 'capture-group'
+          || regExpFlatToken.type === 'non-capture-group'
+          || regExpFlatToken.type === 'positive-lookahead'
+          || regExpFlatToken.type === 'negative-lookahead'
+          || regExpFlatToken.type === 'non-capture-group'
         ) {
-          const textMarkers = this.addTextMarkerForBraces(this.codeMirror, doc, regExpToken);
+          const textMarkers = this.addTextMarkerForBraces(this.codeMirror, doc, regExpFlatToken);
           this.codeMirrorTextMarkers.push(...textMarkers);
         } else {
-          const textMarker = this.addTextMarkerForRange(this.codeMirror, doc, regExpToken);
+          const textMarker = this.addTextMarkerForRange(this.codeMirror, doc, regExpFlatToken);
           this.codeMirrorTextMarkers.push(textMarker);
         }
       });
@@ -145,26 +164,26 @@ export default Vue.extend({
     addTextMarkerForRange(
       codeMirror: CodeMirror.EditorFromTextArea,
       doc: CodeMirror.Doc,
-      regExpToken: RegExpToken,
+      regExpFlatToken: RegExpFlatToken,
     ): CodeMirror.TextMarker {
       return codeMirror.markText(
-        doc.posFromIndex(regExpToken.indexStart),
-        doc.posFromIndex(regExpToken.indexEnd),
+        doc.posFromIndex(regExpFlatToken.indexStart),
+        doc.posFromIndex(regExpFlatToken.indexEnd),
         {
-          className: `regexp-token-highlight-${regExpToken.type}`,
+          className: `regexp-token-highlight-${regExpFlatToken.type}`,
         },
       );
     },
     addTextMarkerForBraces(
       codeMirror: CodeMirror.EditorFromTextArea,
       doc: CodeMirror.Doc,
-      regExpToken: RegExpToken,
+      regExpFlatToken: RegExpFlatToken,
     ): CodeMirror.TextMarker[] {
-      const { indexStart, indexEnd, type } = regExpToken;
+      const { indexStart, indexEnd, type } = regExpFlatToken;
       let offset = 0;
       if (
-        regExpToken.type === 'positive-lookahead'
-        || regExpToken.type === 'negative-lookahead'
+        regExpFlatToken.type === 'positive-lookahead'
+        || regExpFlatToken.type === 'negative-lookahead'
       ) {
         offset = 2;
       }
@@ -193,7 +212,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-div {
+.codemirror-container {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
   0 2px 2px 0 rgba(0, 0, 0, 0.14),
   0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -203,10 +222,17 @@ div {
 }
 
 @media (prefers-color-scheme: dark) {
-  div {
+  .codemirror-container {
     background: #212121;
   }
 }
+
+.validation {
+  padding-top: 5px;
+  color: #D44;
+  min-height: 30px;
+}
+
 </style>
 
 <style>

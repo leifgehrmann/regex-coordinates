@@ -43,6 +43,7 @@
 import Vue from 'vue';
 import MatchGroupTypeSelect from '@/components/MatchGroupTypeSelect.vue';
 import RegExpMatchArrayInverter from '../utils/regExpMatchArrayInverter';
+import RegExpUnescape from '@/utils/regExpUnescape';
 
 interface GroupSettings {
   type: string|null;
@@ -62,7 +63,7 @@ function getNumberOfRegexCaptureGroups(regexString: string): number {
   try {
     // We can trick regex by passing in an alternative which matches blank
     // which will tell us the actual number of capture groups there are. ;)
-    const regex = new RegExp(`${regexString}|`);
+    const regex = new RegExp(`${RegExpUnescape.unescape(regexString)}|`);
     const result = regex.exec('');
     if (result === null) {
       return 0;

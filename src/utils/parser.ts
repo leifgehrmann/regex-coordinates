@@ -1,3 +1,5 @@
+import RegExpUnescape from '@/utils/regExpUnescape';
+
 export default class Parser {
   private regex: RegExp | null;
 
@@ -7,7 +9,7 @@ export default class Parser {
 
   public setRegexFromString(regexString: string): void {
     try {
-      this.regex = new RegExp(regexString, 'gm');
+      this.regex = new RegExp(RegExpUnescape.unescape(regexString), 'gm');
     } catch {
       this.regex = null;
     }

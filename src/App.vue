@@ -38,11 +38,14 @@
             help with creating the expression.
             <strong>Note:</strong> Only the JavaScript Regex Engine is supported for now.
           </p>
-          <RegexInput :value.sync="regex" />
+          <RegexInput
+            :value.sync="regex"
+            :error.sync="regexHasError"
+          />
 
           <h2>Step 2. Input data</h2>
           <DataInput
-            :regex-string="regex"
+            :regex-string="!regexHasError ? regex : null"
             :value.sync="data"
           />
 
@@ -52,7 +55,7 @@
           </p>
           <div class="horizontally-scroll-container">
             <GroupSettingsTable
-              :regex-string="regex"
+              :regex-string="!regexHasError ? regex : null"
               :regex-match-all-result="allMatchGroupsResult"
               :all-group-settings.sync="allGroupSettings"
             />
@@ -92,6 +95,7 @@ export default Vue.extend({
 
   data: () => ({
     regex: '',
+    regexHasError: false,
     data: '',
     parser: new Parser(),
     parsedData: [] as RegExpMatchArray[],

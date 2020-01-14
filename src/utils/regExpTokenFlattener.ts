@@ -1,4 +1,4 @@
-import regexp, {
+import {
   Token,
   Alternate,
   Match,

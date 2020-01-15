@@ -1,5 +1,7 @@
 # Regex-Coordinates
 
+[![Code Coverage](https://codecov.io/gh/leifgehrmann/regex-coordinates/branch/master/graph/badge.svg)](https://codecov.io/gh/leifgehrmann/regex-coordinates)
+
 A single-page web application to parse text as coordinate data and
 output coordinate data as GeoJSON.
 

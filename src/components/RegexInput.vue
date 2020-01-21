@@ -1,9 +1,14 @@
 <template>
   <div>
     <div class="codemirror-container">
-      <textarea
-        ref="textarea"
-      />
+      <div>/</div>
+      <div>
+        <textarea
+          ref="textarea"
+        />
+      </div>
+      <div>/</div>
+      <regex-flags />
     </div>
     <div
       class="validation"
@@ -24,9 +29,13 @@ import regExpParser, { Token } from 'regexp';
 import regExpTokenFlattener from '@/utils/regExpTokenFlattener';
 import RegExpFlatToken from '@/utils/regExpFlatToken';
 import RegExpUnescape from '@/utils/regExpUnescape';
+import RegexFlags from '@/components/RegexFlags.vue';
 
 export default Vue.extend({
   name: 'RegexInput',
+  components: {
+    RegexFlags,
+  },
   props: {
     value: {
       type: String,

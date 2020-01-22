@@ -31,6 +31,7 @@ export default Vue.extend({
     codeMirror: null as EditorFromTextArea|null,
     textMarkers: [] as CodeMirror.TextMarker[],
     parser: new Parser(),
+    maxMarkers: 50,
   }),
   watch: {
     regexString(): void {
@@ -104,6 +105,9 @@ export default Vue.extend({
       const doc = this.codeMirror.getDoc();
       this.parser.parse(this.value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
         if (this.codeMirror === null) {
+          return;
+        }
+        if (regExpMatchArrayIndex > this.maxMarkers) {
           return;
         }
         const indexStart = regExpMatchArray.index;

@@ -11,21 +11,21 @@
     "test": "jest --config jestconfig.json"
   },
   "dependencies": {
-    "@types/codemirror": "0.0.82",
-    "@typescript-eslint/parser": "^2.16.0",
-    "codemirror": "^5.50.2",
+    "@types/codemirror": "0.0.83",
+    "@typescript-eslint/parser": "^2.17.0",
+    "codemirror": "^5.51.0",
     "core-js": "^3.6.4",
     "debounce": "^1.2.0",
     "regexp": "^1.0.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.2.2",
     "vue-property-decorator": "^8.3.0",
-    "vuetify": "^2.2.4"
+    "vuetify": "^2.2.5"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
     "@types/jest": "^24.9.0",
-    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@vue/cli-plugin-babel": "^4.1.2",
     "@vue/cli-plugin-eslint": "^4.1.2",
     "@vue/cli-plugin-typescript": "^4.1.2",
@@ -36,7 +36,7 @@
     "codecov": "^3.6.1",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.1.2",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
     "ts-jest": "^24.3.0",

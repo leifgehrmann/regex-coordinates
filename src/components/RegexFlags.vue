@@ -6,20 +6,22 @@
     >
       gmiyus
     </div>
-    <div
-      v-if="showDropdown"
-      v-on-clickaway="dismiss"
-      class="dropdown"
-      @click="dismiss"
-    >
-      <ul>
-        <li
-          v-for="flagOptionItem in flagOptionItems"
-          :key="flagOptionItem.key"
-        >
-          {{ flagOptionItem.label }}
-        </li>
-      </ul>
+    <div class="dropdown-container">
+      <div
+        v-if="showDropdown"
+        v-on-clickaway="dismiss"
+        class="dropdown"
+        @click="dismiss"
+      >
+        <ul>
+          <li
+            v-for="flagOptionItem in flagOptionItems"
+            :key="flagOptionItem.key"
+          >
+            {{ flagOptionItem.label }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -83,13 +85,22 @@ export default Vue.extend({
   opacity: 0.8;
 }
 
+.dropdown-container {
+  position: relative;
+  width: 0;
+  height: 0;
+  left: 100%;
+}
+
 .dropdown {
   background: #FFF;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   position: absolute;
+  top: 3px;
+  right: 0;
   z-index: 10;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -102,19 +113,18 @@ export default Vue.extend({
 
 .dropdown ul li {
   cursor: pointer;
-  padding: 0 5px;
+  padding: 2px 8px 2px 35px;
 }
 
 .dropdown ul li:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 @media (prefers-color-scheme: dark) {
   .dropdown {
-    border: 1px solid #FFF;
-    background: #000;
+    background: #212121;
   }
-  .dropdown ul li span {
-    color: #AAEEFF;
+  .dropdown ul li:hover {
+    background: rgba(255, 255, 255, 0.05);
   }
 }
 </style>

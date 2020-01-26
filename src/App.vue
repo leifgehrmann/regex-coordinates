@@ -40,6 +40,7 @@
           </p>
           <RegexInput
             :value.sync="regex"
+            :flags.sync="regexFlags"
             :error.sync="regexHasError"
           />
 
@@ -82,6 +83,7 @@ import GeoJsonOutput from './components/GeoJsonOutput.vue';
 import Parser from '@/utils/parser';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
+import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 
 export default Vue.extend({
   name: 'App',
@@ -95,6 +97,10 @@ export default Vue.extend({
 
   data: () => ({
     regex: '',
+    regexFlags: {
+      global: true,
+      multiline: true,
+    } as RegExpFlagsConfig,
     regexHasError: false,
     data: '',
     parser: new Parser(),

@@ -14,6 +14,7 @@
       </div>
       <regex-flags
         class="regex-flags"
+        :flags.sync="flags"
       />
     </div>
     <div
@@ -36,6 +37,7 @@ import regExpTokenFlattener from '@/utils/regExpTokenFlattener';
 import RegExpFlatToken from '@/utils/regExpFlatToken';
 import RegExpUnescape from '@/utils/regExpUnescape';
 import RegexFlags from '@/components/RegexFlags.vue';
+import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 
 export default Vue.extend({
   name: 'RegexInput',
@@ -46,6 +48,10 @@ export default Vue.extend({
     value: {
       type: String,
       default: '',
+    },
+    flags: {
+      type: Object,
+      default: (): RegExpFlagsConfig => ({}),
     },
     error: {
       type: Boolean,

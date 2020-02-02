@@ -5,7 +5,7 @@
       @click="showDropdown = !showDropdown"
     >
       <span class="selected-flags">{{ selectedFlags }}</span>
-      <span class="selected-flags-icon" />
+      <font-awesome-icon icon="flag" />
     </div>
     <div class="dropdown-container">
       <div
@@ -19,6 +19,10 @@
             :key="flagOptionItem.key"
             @click="flagOptionItem.selected = !flagOptionItem.selected"
           >
+            <font-awesome-icon
+              icon="check"
+              :style="{visibility: flagOptionItem.selected ? 'visible' : 'hidden'}"
+            />
             {{ flagOptionItem.label }}
           </li>
         </ul>
@@ -30,10 +34,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mixin as clickaway } from 'vue-clickaway';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faFlag, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
+
+library.add(faFlag);
+library.add(faCheck);
 
 export default Vue.extend({
   name: 'RegexFlags',
+  components: {
+    FontAwesomeIcon,
+  },
   mixins: [clickaway],
   props: {
     flags: {
@@ -115,17 +128,15 @@ export default Vue.extend({
   user-select: none;
 }
 
-.selected-flags-icon {
-  display: inline-block;
-  background: #000;
+.svg-inline--fa {
   width: 16px;
   height: 16px;
-  vertical-align: text-bottom;
   margin-left: 2px;
   margin-right: 2px;
+  opacity: 0.8;
 }
 
-.selected-flags-container:hover .selected-flags-icon {
+.selected-flags-container:hover {
   opacity: 0.8;
 }
 
@@ -137,6 +148,7 @@ export default Vue.extend({
 }
 
 .dropdown {
+  width: 120px;
   background: #FFF;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
@@ -157,7 +169,7 @@ export default Vue.extend({
 
 .dropdown ul li {
   cursor: pointer;
-  padding: 2px 8px 2px 35px;
+  padding: 2px 8px 2px 8px;
 }
 
 .dropdown ul li:hover {

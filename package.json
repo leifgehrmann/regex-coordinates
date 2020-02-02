@@ -11,6 +11,9 @@
     "test": "jest --config jestconfig.json"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "@types/codemirror": "0.0.83",
     "@typescript-eslint/parser": "^2.17.0",
     "codemirror": "^5.51.0",

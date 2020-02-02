@@ -11,6 +11,9 @@
     "test": "jest --config jestconfig.json"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "@types/codemirror": "0.0.83",
     "@typescript-eslint/parser": "^2.17.0",
     "codemirror": "^5.51.0",
@@ -19,12 +22,14 @@
     "regexp": "^1.0.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.2.2",
+    "vue-clickaway": "^2.2.2",
     "vue-property-decorator": "^8.3.0",
     "vuetify": "^2.2.5"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
     "@types/jest": "^24.9.0",
+    "@types/vue-clickaway": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@vue/cli-plugin-babel": "^4.1.2",
     "@vue/cli-plugin-eslint": "^4.1.2",

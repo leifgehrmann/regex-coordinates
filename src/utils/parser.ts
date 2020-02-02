@@ -7,9 +7,12 @@ export default class Parser {
     this.regex = null;
   }
 
-  public setRegexFromString(regexString: string): void {
+  public setRegexFromString(
+    regexString: string,
+    regexFlags: string,
+  ): void {
     try {
-      this.regex = new RegExp(RegExpUnescape.unescape(regexString), 'gm');
+      this.regex = new RegExp(RegExpUnescape.unescape(regexString), regexFlags);
     } catch {
       this.regex = null;
     }

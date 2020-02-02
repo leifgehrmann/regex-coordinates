@@ -22,6 +22,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    regexFlagsString: {
+      type: String,
+      default: '',
+    },
     value: {
       type: String,
       default: '',
@@ -35,6 +39,10 @@ export default Vue.extend({
   }),
   watch: {
     regexString(): void {
+      this.updateRegexParser();
+      this.updateHighlightMatches();
+    },
+    regexFlagsString(): void {
       this.updateRegexParser();
       this.updateHighlightMatches();
     },
@@ -89,7 +97,7 @@ export default Vue.extend({
       return window.matchMedia('(prefers-color-scheme: dark)');
     },
     updateRegexParser(): void {
-      this.parser.setRegexFromString(this.regexString);
+      this.parser.setRegexFromString(this.regexString, this.regexFlagsString);
     },
     clearHighlightMatches(): void {
       this.textMarkers.forEach((textMarker) => {

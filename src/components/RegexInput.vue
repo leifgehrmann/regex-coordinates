@@ -1,8 +1,20 @@
 <template>
   <div>
-    <div class="codemirror-container">
-      <textarea
-        ref="textarea"
+    <div class="regex-container">
+      <div class="regex-delimiter">
+        /
+      </div>
+      <div class="codemirror-container">
+        <textarea
+          ref="textarea"
+        />
+      </div>
+      <div class="regex-delimiter">
+        /
+      </div>
+      <regex-flags
+        class="regex-flags"
+        :flags.sync="flags"
       />
     </div>
     <div
@@ -24,13 +36,22 @@ import regExpParser, { Token } from 'regexp';
 import regExpTokenFlattener from '@/utils/regExpTokenFlattener';
 import RegExpFlatToken from '@/utils/regExpFlatToken';
 import RegExpUnescape from '@/utils/regExpUnescape';
+import RegexFlags from '@/components/RegexFlags.vue';
+import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 
 export default Vue.extend({
   name: 'RegexInput',
+  components: {
+    RegexFlags,
+  },
   props: {
     value: {
       type: String,
       default: '',
+    },
+    flags: {
+      type: Object,
+      default: (): RegExpFlagsConfig => ({}),
     },
     error: {
       type: Boolean,
@@ -212,19 +233,31 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.codemirror-container {
+.regex-container {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
   0 2px 2px 0 rgba(0, 0, 0, 0.14),
   0 1px 5px 0 rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   padding: 4px;
   background: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
 @media (prefers-color-scheme: dark) {
-  .codemirror-container {
+  .regex-container {
     background: #212121;
   }
+}
+
+.regex-delimiter {
+  padding: 4px 0;
+  font-family: monospace;
+}
+
+.regex-flags {
+  padding: 4px 0;
 }
 
 .validation {
@@ -233,11 +266,19 @@ export default Vue.extend({
   min-height: 30px;
 }
 
+.codemirror-container {
+  flex: 1;
+}
+
 </style>
 
 <style>
 .CodeMirror {
   height: auto;
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  padding: 0;
 }
 .regexp-token-highlight-quantifier {
   background: #0FD;

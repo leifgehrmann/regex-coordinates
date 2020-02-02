@@ -47,6 +47,7 @@
           <h2>Step 2. Input data</h2>
           <DataInput
             :regex-string="!regexHasError ? regex : null"
+            :regex-flags-string="regexFlagsString"
             :value.sync="data"
           />
 
@@ -84,6 +85,7 @@ import Parser from '@/utils/parser';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
+import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
 
 export default Vue.extend({
   name: 'App',
@@ -100,6 +102,10 @@ export default Vue.extend({
     regexFlags: {
       global: true,
       multiline: true,
+      insensitive: false,
+      singleline: false,
+      unicode: false,
+      sticky: false,
     } as RegExpFlagsConfig,
     regexHasError: false,
     data: '',
@@ -109,10 +115,19 @@ export default Vue.extend({
     allGroupSettings: [] as GroupSettings[],
     geoJson: '',
   }),
+  computed: {
+    regexFlagsString(): string {
+      return regExpFlagsFormatter(this.regexFlags);
+    },
+  },
 
   watch: {
     regex(newVal: string): void {
-      this.parser.setRegexFromString(newVal);
+      this.parser.setRegexFromString(newVal, this.regexFlagsString);
+      this.updateEverything();
+    },
+    regexFlagsString(newVal: string): void {
+      this.parser.setRegexFromString(this.regex, newVal);
       this.updateEverything();
     },
     data(): void {

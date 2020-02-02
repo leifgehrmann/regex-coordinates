@@ -55,7 +55,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    showDropdown: true,
+    showDropdown: false,
     flagOptionItems: [
       {
         flag: 'g', key: 'global', label: 'global', selected: false,

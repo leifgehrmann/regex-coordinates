@@ -51,7 +51,17 @@
             :value.sync="data"
           />
 
-          <h2>Step 3. Capture Group Settings</h2>
+          <h2>Step 3. Projection Settings</h2>
+          <p class="body-2">
+            Select the map projection the input data is in.
+            By default, we assume it is latitude/longitude (WGS 84).
+          </p>
+          <ProjectionSelect
+            :epsg.sync="projectionEpsg"
+            :proj4.sync="projectionProj4"
+          />
+
+          <h2>Step 4. Capture Group Settings</h2>
           <p class="body-2">
             For each capture group in the regular expression, select the appropriate type.
           </p>
@@ -79,6 +89,7 @@
 import Vue from 'vue';
 import RegexInput from './components/RegexInput.vue';
 import DataInput from './components/DataInput.vue';
+import ProjectionSelect from './components/ProjectionSelect.vue';
 import GroupSettingsTable from './components/GroupSettingsTable.vue';
 import GeoJsonOutput from './components/GeoJsonOutput.vue';
 import Parser from '@/utils/parser';
@@ -93,6 +104,7 @@ export default Vue.extend({
   components: {
     RegexInput,
     DataInput,
+    ProjectionSelect,
     GroupSettingsTable,
     GeoJsonOutput,
   },
@@ -109,6 +121,8 @@ export default Vue.extend({
     } as RegExpFlagsConfig,
     regexHasError: false,
     data: '',
+    projectionEpsg: '',
+    projectionProj4: '',
     parser: new Parser(),
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],
@@ -159,6 +173,7 @@ export default Vue.extend({
 | Bob   | 2020-03-22T19:26:42 | 56.11799 | -3.93653  |
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
+      this.projectionEpsg = 'EPSG:4326';
       this.allGroupSettings = [
         { type: null },
         { type: null },

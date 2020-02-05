@@ -55,6 +55,8 @@
           <p class="body-2">
             Select the map projection the input data is in.
             By default, we assume it is latitude/longitude (WGS 84).
+            Search <a href="https://epsg.io">epsg.io</a> for information on
+            other projection systems.
           </p>
           <ProjectionSelect
             :epsg.sync="projectionEpsg"

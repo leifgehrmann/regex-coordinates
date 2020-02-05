@@ -61,6 +61,7 @@
           <ProjectionSelect
             :epsg.sync="projectionEpsg"
             :proj4.sync="projectionProj4"
+            :search-input.sync="projectionSearchInput"
           />
 
           <h2>Step 4. Capture Group Settings</h2>
@@ -125,6 +126,7 @@ export default Vue.extend({
     data: '',
     projectionEpsg: '',
     projectionProj4: '',
+    projectionSearchInput: 'TEST',
     parser: new Parser(),
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],

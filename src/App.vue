@@ -59,8 +59,8 @@
             other projection systems.
           </p>
           <ProjectionSelect
-            :epsg.sync="projectionEpsg"
-            :proj4.sync="projectionProj4"
+            :selected-epsg-code.sync="projectionEpsgCode"
+            :selected-proj4.sync="projectionProj4"
             :search-input.sync="projectionSearchInput"
           />
 
@@ -124,7 +124,7 @@ export default Vue.extend({
     } as RegExpFlagsConfig,
     regexHasError: false,
     data: '',
-    projectionEpsg: '',
+    projectionEpsgCode: '4326',
     projectionProj4: '',
     projectionSearchInput: 'TEST',
     parser: new Parser(),
@@ -177,7 +177,7 @@ export default Vue.extend({
 | Bob   | 2020-03-22T19:26:42 | 56.11799 | -3.93653  |
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
-      this.projectionEpsg = 'EPSG:4326';
+      this.projectionEpsgCode = '4326';
       this.allGroupSettings = [
         { type: null },
         { type: null },

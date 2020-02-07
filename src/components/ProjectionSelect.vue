@@ -1,13 +1,12 @@
 <template>
   <div
-    v-on-clickaway="dismiss"
+    v-on-clickaway="focusout"
   >
     <div class="container">
       <input
         class="search-input"
         type="text"
-        :value.sync="searchInput"
-        @focusin="open=true"
+        @focusin="focusin"
         @keydown.enter="enter"
         @keydown.down="down"
         @keydown.up="up"
@@ -24,7 +23,7 @@
       </div>
     </div>
     <div
-      v-if="open"
+      v-if="searching"
       class="search-results-container"
     >
       <div class="search-results">
@@ -32,7 +31,7 @@
           <li
             v-for="match in matches"
             :key="match"
-            @click="enter"
+            @click="selectProjection"
           >
             {{ match }}
             <font-awesome-icon
@@ -63,7 +62,11 @@ export default Vue.extend({
   },
   mixins: [clickaway],
   props: {
-    selected: {
+    selectedEpsgCode: {
+      type: String,
+      default: '',
+    },
+    selectedProj4: {
       type: String,
       default: '',
     },
@@ -75,27 +78,55 @@ export default Vue.extend({
   data() {
     return {
       searching: false,
-      open: false,
       current: 0,
       suggestions: ['123', '4566', 'abc', 'efg'],
     };
+  },
+  computed: {
+    selectedLabel(): string {
+      return `${this.selectedEpsgCode} - BLA`;
+    },
+    matches(): string[] {
+      return this.suggestions.filter((str) => str.indexOf(this.searchInput) >= 0);
+    },
   },
   watch: {
     searchInput(): void {
       console.log('hey!');
     },
-  },
-  computed: {
-    matches(): string[] {
-      return this.suggestions.filter((str) => str.indexOf(this.searchInput) >= 0);
+    selectedEpsgCode(): void {
+      if (!this.searching) {
+        const inputField = this.getSearchInputField();
+        inputField.value = this.selectedLabel;
+      }
     },
+  },
+  mounted() {
+    const inputField = this.getSearchInputField();
+    inputField.value = this.selectedLabel;
   },
   methods: {
-    dismiss(): void {
-      this.open = false;
+    getSearchInputField(): HTMLInputElement {
+      const elements = this.$el.getElementsByClassName('search-input');
+      return elements.item(0) as HTMLInputElement;
     },
-    enter(): void {
-      this.open = false;
+    focusin(): void {
+      const inputField = this.getSearchInputField();
+      inputField.value = this.searchInput;
+      inputField.setSelectionRange(0, inputField.value.length);
+      this.searching = true;
+    },
+    focusout(): void {
+      this.searching = false;
+      const inputField = this.getSearchInputField();
+      inputField.value = this.selectedLabel;
+    },
+    dismiss(): void {
+      this.searching = false;
+    },
+    selectProjection(): void {
+      this.$emit('update:selectedEpsgCode', Math.random().toString(10));
+      this.focusout();
     },
     up(): void {
       if (this.current > 0) {
@@ -111,17 +142,17 @@ export default Vue.extend({
       return index === this.current;
     },
     change(): void {
-      if (this.open === false) {
-        this.open = true;
+      if (!this.searching) {
+        this.searching = true;
         this.current = 0;
       }
     },
     // eslint-disable-next-line no-unused-vars
     suggestionClick(index: number): void {
-      this.open = false;
+      this.searching = false;
     },
     searchUpdate(event: Event): void {
-      if (event.target !== null) {
+      if (event.target !== null && this.searching) {
         const target = event.target as HTMLInputElement;
         this.$emit('update:searchInput', target.value);
       }

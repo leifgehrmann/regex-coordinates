@@ -12,13 +12,11 @@
         @keydown.up="up"
         @input="searchUpdate"
       >
-      <div class="search-button">
-        <font-awesome-icon
-          icon="search"
-        />
+      <div class="clear-button">
         <font-awesome-icon
           icon="times-circle"
-          style="display: none"
+          :style="{visibility: hasSomeInput ? 'visible' : 'hidden'}"
+          @click="clearProjection"
         />
       </div>
     </div>
@@ -29,9 +27,10 @@
       <div class="search-results">
         <ul>
           <li
-            v-for="match in matches"
-            :key="match"
-            @click="selectProjection"
+            v-for="(match, index) in matches"
+            :key="index"
+            @click="selectProjection(match)"
+            :class="{ 'search-result-selected': index === current }"
           >
             {{ match }}
             <font-awesome-icon
@@ -79,20 +78,29 @@ export default Vue.extend({
     return {
       searching: false,
       current: 0,
-      suggestions: ['123', '4566', 'abc', 'efg'],
+      suggestions: ['123', '321', '4566', 'abc', 'efg'],
     };
   },
   computed: {
     selectedLabel(): string {
+      if (this.selectedEpsgCode === '') {
+        return 'Select a projection...';
+      }
       return `${this.selectedEpsgCode} - BLA`;
     },
     matches(): string[] {
       return this.suggestions.filter((str) => str.indexOf(this.searchInput) >= 0);
     },
+    hasSomeInput(): boolean {
+      return (this.selectedEpsgCode !== '' || this.searching) && this.searchInput !== '';
+    },
   },
   watch: {
     searchInput(): void {
-      console.log('hey!');
+      if (this.searching) {
+        const inputField = this.getSearchInputField();
+        inputField.value = this.searchInput;
+      }
     },
     selectedEpsgCode(): void {
       if (!this.searching) {
@@ -120,22 +128,43 @@ export default Vue.extend({
       this.searching = false;
       const inputField = this.getSearchInputField();
       inputField.value = this.selectedLabel;
+      inputField.setSelectionRange(0, inputField.value.length);
     },
     dismiss(): void {
       this.searching = false;
     },
-    selectProjection(): void {
-      this.$emit('update:selectedEpsgCode', Math.random().toString(10));
+    selectProjection(value: string): void {
+      this.$emit('update:selectedEpsgCode', value);
       this.focusout();
     },
-    up(): void {
+    clearProjection(): void {
+      this.$emit('update:selectedEpsgCode', '');
+      this.$emit('update:selectedProj4', '');
+      this.$emit('update:searchInput', '');
+      this.getSearchInputField().focus();
+      this.focusin();
+    },
+    up(event: Event): void {
       if (this.current > 0) {
         this.current -= 1;
       }
+      event.preventDefault();
     },
-    down(): void {
+    down(event: Event): void {
       if (this.current < this.matches.length - 1) {
         this.current += 1;
+      }
+      event.preventDefault();
+    },
+    enter(): void {
+      if (this.searching) {
+        if (this.current < this.matches.length && this.current >= 0) {
+          this.selectProjection(this.matches[this.current]);
+        } else {
+          this.focusout();
+        }
+      } else {
+        this.focusin();
       }
     },
     isActive(index: number): boolean {
@@ -155,6 +184,8 @@ export default Vue.extend({
       if (event.target !== null && this.searching) {
         const target = event.target as HTMLInputElement;
         this.$emit('update:searchInput', target.value);
+      } else {
+        this.focusin();
       }
     },
   },
@@ -175,16 +206,16 @@ export default Vue.extend({
 .search-input {
   width: 100%;
   border-radius: 4px;
-  padding-left: calc(7px * 2 + 16px);
+  padding-left: 7px;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-.search-button {
+.clear-button {
   display: inline-block;
   position: absolute;
-  left: 7px;
-  top: 5px;
+  right: 7px;
+  top: 6px;
 }
 
 .selected-name {
@@ -220,6 +251,10 @@ export default Vue.extend({
 
 .search-results ul li:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+.search-result-selected {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .svg-inline--fa {

@@ -106,7 +106,7 @@ export default Vue.extend({
       current: 0,
       selectedName: '',
       maxMatches: 50,
-      projections: Object.values(allEpsgProjections) as Projection[],
+      projections: [] as Projection[],
     };
   },
   computed: {
@@ -178,6 +178,7 @@ export default Vue.extend({
     const selectedProjection = (
       allEpsgProjections as {[key: string]: Projection}
     )[this.selectedEpsgCode];
+    this.projections = Object.values(allEpsgProjections as {[key: string]: Projection});
     this.selectedName = selectedProjection.name;
     this.$emit('update:selectedProj4', selectedProjection.code);
     inputField.value = this.selectedLabel;

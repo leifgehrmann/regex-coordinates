@@ -126,7 +126,7 @@ export default Vue.extend({
     data: '',
     projectionEpsgCode: '4326',
     projectionProj4: '',
-    projectionSearchInput: 'TEST',
+    projectionSearchInput: '4326',
     parser: new Parser(),
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],
@@ -177,7 +177,6 @@ export default Vue.extend({
 | Bob   | 2020-03-22T19:26:42 | 56.11799 | -3.93653  |
 | Bob   | 2020-03-26T09:46:18 | 55.45705 | -4.63623  |
 +-------+---------------------+----------+-----------+`;
-      this.projectionEpsgCode = '4326';
       this.allGroupSettings = [
         { type: null },
         { type: null },

@@ -6,6 +6,7 @@
       <input
         class="search-input"
         type="text"
+        placeholder="Enter an EPSG code or name"
         @focusin="focusin"
         @keydown.enter="enter"
         @keydown.down="down"
@@ -25,17 +26,29 @@
       class="search-results-container"
     >
       <div class="search-results">
-        <ul>
+        <ul class="search-results-list">
           <li
             v-for="(match, index) in matches"
             :key="index"
-            @click="selectProjection(match)"
-            :class="{ 'search-result-selected': index === current }"
+            :class="{ 'search-result-list-item-selected': index === current }"
+            class="search-results-list-item"
+            @click="selectProjection(match, index)"
+            @mousemove="current = index"
           >
-            {{ match }}
-            <font-awesome-icon
-              icon="info-circle"
-            />
+            EPSG:{{ match.code }} - {{ match.name }}
+          </li>
+          <li
+            v-if="searchInput.length > 0"
+            class="search-results-epsg-io"
+          >
+            <a
+              target="_blank"
+              :href="`https://epsg.io/?q=${encodeURI(searchInput)}`">
+              <font-awesome-icon
+                icon="search"
+              />
+              Search EPSG.io for '{{ searchInput }}'...
+            </a>
           </li>
         </ul>
       </div>
@@ -49,10 +62,23 @@ import { mixin as clickaway } from 'vue-clickaway';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faTimesCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import allEpsgProjections from 'epsg-index/all.json';
 
 library.add(faSearch);
 library.add(faTimesCircle);
 library.add(faInfoCircle);
+
+interface Projection {
+  accuracy: number|null;
+  area: string|null;
+  bbox: number[]|null;
+  code: string;
+  kind: string;
+  name: string;
+  proj4: string|null;
+  unit: string|null;
+  wkt: string|null;
+}
 
 export default Vue.extend({
   name: 'ProjectionSelect',
@@ -78,7 +104,9 @@ export default Vue.extend({
     return {
       searching: false,
       current: 0,
-      suggestions: ['123', '321', '4566', 'abc', 'efg'],
+      selectedName: '',
+      maxMatches: 50,
+      projections: Object.values(allEpsgProjections) as Projection[],
     };
   },
   computed: {
@@ -86,10 +114,46 @@ export default Vue.extend({
       if (this.selectedEpsgCode === '') {
         return 'Select a projection...';
       }
-      return `${this.selectedEpsgCode} - BLA`;
+      return `EPSG:${this.selectedEpsgCode} - ${this.selectedName}`;
     },
-    matches(): string[] {
-      return this.suggestions.filter((str) => str.indexOf(this.searchInput) >= 0);
+    matches(): Projection[] {
+      if (this.searchInput.length === 0) {
+        return [];
+      }
+      const matches: Projection[] = [];
+      const searchInputLower = this.searchInput.toLowerCase();
+      this.projections.every((projection): boolean => {
+        if (matches.length > this.maxMatches + 1) {
+          return false;
+        }
+        let foundMatch = false;
+        if (
+          !foundMatch
+          && (
+            projection.code.indexOf(searchInputLower) !== -1
+            || `epsg:${projection.code}`.indexOf(searchInputLower) !== -1
+          )
+        ) {
+          foundMatch = true;
+        }
+        if (
+          !foundMatch
+          && projection.name.toLowerCase().indexOf(searchInputLower) !== -1
+        ) {
+          foundMatch = true;
+        }
+        if (
+          !foundMatch
+          && projection.area && projection.area.toLowerCase().indexOf(searchInputLower) !== -1
+        ) {
+          foundMatch = true;
+        }
+        if (foundMatch && projection.proj4 !== null) {
+          matches.push(projection);
+        }
+        return true;
+      });
+      return matches;
     },
     hasSomeInput(): boolean {
       return (this.selectedEpsgCode !== '' || this.searching) && this.searchInput !== '';
@@ -111,12 +175,21 @@ export default Vue.extend({
   },
   mounted() {
     const inputField = this.getSearchInputField();
+    const selectedProjection = (
+      allEpsgProjections as {[key: string]: Projection}
+    )[this.selectedEpsgCode];
+    this.selectedName = selectedProjection.name;
+    this.$emit('update:selectedProj4', selectedProjection.code);
     inputField.value = this.selectedLabel;
   },
   methods: {
     getSearchInputField(): HTMLInputElement {
       const elements = this.$el.getElementsByClassName('search-input');
       return elements.item(0) as HTMLInputElement;
+    },
+    getCurrentSearchResultListItem(): HTMLLIElement|null {
+      const elements = this.$el.getElementsByClassName('search-results-list-item');
+      return elements.item(this.current) as HTMLLIElement;
     },
     focusin(): void {
       const inputField = this.getSearchInputField();
@@ -133,14 +206,18 @@ export default Vue.extend({
     dismiss(): void {
       this.searching = false;
     },
-    selectProjection(value: string): void {
-      this.$emit('update:selectedEpsgCode', value);
+    selectProjection(projection: Projection, index: number): void {
+      this.$emit('update:selectedEpsgCode', projection.code);
+      this.$emit('update:selectedProj4', projection.proj4);
+      this.current = index;
+      this.selectedName = projection.name;
       this.focusout();
     },
     clearProjection(): void {
       this.$emit('update:selectedEpsgCode', '');
       this.$emit('update:selectedProj4', '');
       this.$emit('update:searchInput', '');
+      this.selectedName = '';
       this.getSearchInputField().focus();
       this.focusin();
     },
@@ -148,18 +225,26 @@ export default Vue.extend({
       if (this.current > 0) {
         this.current -= 1;
       }
+      const currentListItem = this.getCurrentSearchResultListItem();
+      if (currentListItem !== null) {
+        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
+      }
       event.preventDefault();
     },
     down(event: Event): void {
       if (this.current < this.matches.length - 1) {
         this.current += 1;
       }
+      const currentListItem = this.getCurrentSearchResultListItem();
+      if (currentListItem !== null) {
+        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
+      }
       event.preventDefault();
     },
     enter(): void {
       if (this.searching) {
         if (this.current < this.matches.length && this.current >= 0) {
-          this.selectProjection(this.matches[this.current]);
+          this.selectProjection(this.matches[this.current], this.current);
         } else {
           this.focusout();
         }
@@ -237,6 +322,8 @@ export default Vue.extend({
   position: absolute;
   top: 5px;
   z-index: 10;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 .search-results ul {
@@ -249,12 +336,12 @@ export default Vue.extend({
   padding: 2px 8px 2px 8px;
 }
 
-.search-results ul li:hover {
-  background: rgba(0, 0, 0, 0.05);
+.search-result-list-item-selected {
+  background: rgba(0, 0, 0, 0.1);
 }
 
-.search-result-selected {
-  background: rgba(0, 0, 0, 0.1);
+.search-results-epsg-io a {
+  text-decoration: none;
 }
 
 .svg-inline--fa {
@@ -270,10 +357,6 @@ export default Vue.extend({
 
   .search-results {
     background: #212121;
-  }
-
-  .search-results ul li:hover {
-    background: rgba(255, 255, 255, 0.05);
   }
 
   .selected-flags-icon {

@@ -43,11 +43,12 @@
           >
             <a
               target="_blank"
-              :href="`https://epsg.io/?q=${encodeURI(searchInput)}`">
+              :href="`https://epsg.io/?q=${encodeURI(searchInput)}`"
+            >
               <font-awesome-icon
                 icon="search"
               />
-              Search EPSG.io for '{{ searchInput }}'...
+              Search EPSG.io for '{{ searchInput }}' for better results...
             </a>
           </li>
         </ul>
@@ -253,19 +254,6 @@ export default Vue.extend({
         this.focusin();
       }
     },
-    isActive(index: number): boolean {
-      return index === this.current;
-    },
-    change(): void {
-      if (!this.searching) {
-        this.searching = true;
-        this.current = 0;
-      }
-    },
-    // eslint-disable-next-line no-unused-vars
-    suggestionClick(index: number): void {
-      this.searching = false;
-    },
     searchUpdate(event: Event): void {
       if (event.target !== null && this.searching) {
         const target = event.target as HTMLInputElement;
@@ -360,8 +348,8 @@ export default Vue.extend({
     background: #212121;
   }
 
-  .selected-flags-icon {
-    background: #FFF;
+  .search-result-list-item-selected {
+    background: rgba(255, 255, 255, 0.1);
   }
 }
 </style>

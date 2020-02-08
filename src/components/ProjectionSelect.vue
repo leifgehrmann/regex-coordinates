@@ -6,7 +6,7 @@
       <input
         class="search-input"
         type="text"
-        placeholder="Enter an EPSG code or name"
+        placeholder="Enter an EPSG code or name..."
         @focusin="focusin"
         @keydown.enter="enter"
         @keydown.down="down"
@@ -113,7 +113,7 @@ export default Vue.extend({
   computed: {
     selectedLabel(): string {
       if (this.selectedEpsgCode === '') {
-        return 'Select a projection...';
+        return '';
       }
       return `EPSG:${this.selectedEpsgCode} - ${this.selectedName}`;
     },
@@ -256,6 +256,7 @@ export default Vue.extend({
     },
     searchUpdate(event: Event): void {
       if (event.target !== null && this.searching) {
+        this.current = 0;
         const target = event.target as HTMLInputElement;
         this.$emit('update:searchInput', target.value);
       } else {
@@ -290,10 +291,6 @@ export default Vue.extend({
   position: absolute;
   right: 7px;
   top: 6px;
-}
-
-.selected-name {
-  display: inline-block;
 }
 
 .search-results-container {

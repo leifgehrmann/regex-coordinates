@@ -16,7 +16,7 @@
       <div class="clear-button">
         <font-awesome-icon
           icon="times-circle"
-          :style="{visibility: hasSomeInput ? 'visible' : 'hidden'}"
+          :style="{visibility: selectedEpsgCode !== '' ? 'visible' : 'hidden'}"
           @click="clearProjection"
         />
       </div>

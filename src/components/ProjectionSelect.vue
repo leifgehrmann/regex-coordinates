@@ -298,6 +298,10 @@ export default Vue.extend({
   opacity: 0.8;
 }
 
+.svg-inline--fa.fa-times-circle {
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: dark) {
   .container {
     background: #212121;

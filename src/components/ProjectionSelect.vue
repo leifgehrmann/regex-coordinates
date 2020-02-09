@@ -63,7 +63,7 @@ import { mixin as clickaway } from 'vue-clickaway';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faTimesCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import allEpsgProjections from 'epsg-index/all.json';
+import EpsgIndex from '@/utils/epsgIndex';
 
 library.add(faSearch);
 library.add(faTimesCircle);
@@ -107,7 +107,7 @@ export default Vue.extend({
       current: 0,
       selectedName: '',
       maxMatches: 50,
-      projections: [] as Projection[],
+      epsgIndex: new EpsgIndex(),
     };
   },
   computed: {
@@ -121,43 +121,7 @@ export default Vue.extend({
       if (this.searchInput.length === 0) {
         return [];
       }
-      const matches: Projection[] = [];
-      const searchInputLower = this.searchInput.toLowerCase();
-      this.projections.every((projection): boolean => {
-        if (matches.length > this.maxMatches + 1) {
-          return false;
-        }
-        let foundMatch = false;
-        if (
-          !foundMatch
-          && (
-            projection.code.indexOf(searchInputLower) !== -1
-            || `epsg:${projection.code}`.indexOf(searchInputLower) !== -1
-          )
-        ) {
-          foundMatch = true;
-        }
-        if (
-          !foundMatch
-          && projection.name.toLowerCase().indexOf(searchInputLower) !== -1
-        ) {
-          foundMatch = true;
-        }
-        if (
-          !foundMatch
-          && projection.area && projection.area.toLowerCase().indexOf(searchInputLower) !== -1
-        ) {
-          foundMatch = true;
-        }
-        if (foundMatch && projection.proj4 !== null) {
-          matches.push(projection);
-        }
-        return true;
-      });
-      return matches;
-    },
-    hasSomeInput(): boolean {
-      return (this.selectedEpsgCode !== '' || this.searching) && this.searchInput !== '';
+      return this.epsgIndex.searchProjections(this.searchInput, this.maxMatches);
     },
   },
   watch: {
@@ -176,22 +140,17 @@ export default Vue.extend({
   },
   mounted() {
     const inputField = this.getSearchInputField();
-    const selectedProjection = (
-      allEpsgProjections as {[key: string]: Projection}
-    )[this.selectedEpsgCode];
-    this.projections = Object.values(allEpsgProjections as {[key: string]: Projection});
-    this.selectedName = selectedProjection.name;
-    this.$emit('update:selectedProj4', selectedProjection.code);
+    const selectedProjection = this.epsgIndex.getProjectionByCode(this.selectedEpsgCode);
+    if (selectedProjection !== null) {
+      this.selectedName = selectedProjection.name;
+      this.$emit('update:selectedProj4', selectedProjection.code);
+    }
     inputField.value = this.selectedLabel;
   },
   methods: {
     getSearchInputField(): HTMLInputElement {
       const elements = this.$el.getElementsByClassName('search-input');
       return elements.item(0) as HTMLInputElement;
-    },
-    getCurrentSearchResultListItem(): HTMLLIElement|null {
-      const elements = this.$el.getElementsByClassName('search-results-list-item');
-      return elements.item(this.current) as HTMLLIElement;
     },
     focusin(): void {
       const inputField = this.getSearchInputField();
@@ -204,9 +163,6 @@ export default Vue.extend({
       const inputField = this.getSearchInputField();
       inputField.value = this.selectedLabel;
       inputField.setSelectionRange(0, inputField.value.length);
-    },
-    dismiss(): void {
-      this.searching = false;
     },
     selectProjection(projection: Projection, index: number): void {
       this.$emit('update:selectedEpsgCode', projection.code);
@@ -227,20 +183,14 @@ export default Vue.extend({
       if (this.current > 0) {
         this.current -= 1;
       }
-      const currentListItem = this.getCurrentSearchResultListItem();
-      if (currentListItem !== null) {
-        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
-      }
+      this.scrollToCurrentListItem();
       event.preventDefault();
     },
     down(event: Event): void {
       if (this.current < this.matches.length - 1) {
         this.current += 1;
       }
-      const currentListItem = this.getCurrentSearchResultListItem();
-      if (currentListItem !== null) {
-        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
-      }
+      this.scrollToCurrentListItem();
       event.preventDefault();
     },
     enter(): void {
@@ -252,6 +202,16 @@ export default Vue.extend({
         }
       } else {
         this.focusin();
+      }
+    },
+    getCurrentSearchResultListItem(): HTMLLIElement|null {
+      const elements = this.$el.getElementsByClassName('search-results-list-item');
+      return elements.item(this.current) as HTMLLIElement;
+    },
+    scrollToCurrentListItem(): void {
+      const currentListItem = this.getCurrentSearchResultListItem();
+      if (currentListItem !== null) {
+        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
       }
     },
     searchUpdate(event: Event): void {

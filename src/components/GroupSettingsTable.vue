@@ -18,6 +18,7 @@
       <td>{{ item.groupNumber }}</td>
       <td>
         <MatchGroupTypeSelect
+          :is-wgs84="isWgs84"
           :value.sync="item.groupSettings.type"
         />
       </td>
@@ -88,6 +89,10 @@ export default Vue.extend({
       type: Array as () => RegExpMatchArray[],
       default: (): RegExpMatchArray[] => [],
     },
+    isWgs84: {
+      type: Boolean,
+      default: (): boolean => false,
+    },
     allGroupSettings: {
       type: Array as () => GroupSettingsArray,
       default: (): GroupSettings[] => [],
@@ -129,8 +134,15 @@ export default Vue.extend({
 
         // Update the table with group matches from the parsed input data.
         allGroupMatches.forEach((groupMatches, groupNumber) => {
+          // This can happen when Vue has only updated the regexString prop,
+          // but not the regexMatchAllResult prop. So we just disregard
+          // setting the property.
+          if (groupNumber >= this.items.length) {
+            return;
+          }
           this.items[groupNumber].groupMatches = groupMatches;
         });
+
         // Clear any rows in the table if there aren't any group matches.
         for (
           let groupNumber = allGroupMatches.length;

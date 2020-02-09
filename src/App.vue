@@ -51,7 +51,20 @@
             :value.sync="data"
           />
 
-          <h2>Step 3. Capture Group Settings</h2>
+          <h2>Step 3. Projection Settings</h2>
+          <p class="body-2">
+            Select the map projection the input data is in.
+            By default, we assume it is latitude/longitude (WGS 84).
+            Search <a href="https://epsg.io">epsg.io</a> for information on
+            other projection systems.
+          </p>
+          <ProjectionSelect
+            :selected-epsg-code.sync="projectionEpsgCode"
+            :selected-proj4.sync="projectionProj4"
+            :search-input.sync="projectionSearchInput"
+          />
+
+          <h2>Step 4. Capture Group Settings</h2>
           <p class="body-2">
             For each capture group in the regular expression, select the appropriate type.
           </p>
@@ -59,6 +72,7 @@
             <GroupSettingsTable
               :regex-string="!regexHasError ? regex : null"
               :regex-match-all-result="allMatchGroupsResult"
+              :is-wgs84="projectionEpsgCode === '4326'"
               :all-group-settings.sync="allGroupSettings"
             />
           </div>
@@ -76,9 +90,11 @@
 </template>
 
 <script lang="ts">
+import proj4 from 'proj4';
 import Vue from 'vue';
 import RegexInput from './components/RegexInput.vue';
 import DataInput from './components/DataInput.vue';
+import ProjectionSelect from './components/ProjectionSelect.vue';
 import GroupSettingsTable from './components/GroupSettingsTable.vue';
 import GeoJsonOutput from './components/GeoJsonOutput.vue';
 import Parser from '@/utils/parser';
@@ -93,6 +109,7 @@ export default Vue.extend({
   components: {
     RegexInput,
     DataInput,
+    ProjectionSelect,
     GroupSettingsTable,
     GeoJsonOutput,
   },
@@ -100,8 +117,8 @@ export default Vue.extend({
   data: () => ({
     regex: '',
     regexFlags: {
-      global: true,
-      multiline: true,
+      global: false,
+      multiline: false,
       insensitive: false,
       singleline: false,
       unicode: false,
@@ -109,6 +126,9 @@ export default Vue.extend({
     } as RegExpFlagsConfig,
     regexHasError: false,
     data: '',
+    projectionEpsgCode: '',
+    projectionProj4: '',
+    projectionSearchInput: '',
     parser: new Parser(),
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],
@@ -131,6 +151,9 @@ export default Vue.extend({
       this.updateEverything();
     },
     data(): void {
+      this.updateEverything();
+    },
+    projectionProj4(): void {
       this.updateEverything();
     },
     allGroupSettings: {
@@ -162,14 +185,29 @@ export default Vue.extend({
       this.allGroupSettings = [
         { type: null },
         { type: null },
-        { type: 'latitude' },
-        { type: 'longitude' },
+        { type: 'y' },
+        { type: 'x' },
       ];
+      this.projectionEpsgCode = '4326';
+      this.projectionSearchInput = '4326';
+      this.regexFlags = {
+        global: true,
+        multiline: true,
+        insensitive: false,
+        singleline: false,
+        unicode: false,
+        sticky: false,
+      };
     },
     updateEverything(): void {
       this.parsedData = this.parser.parse(this.data);
       this.allMatchGroupsResult = this.parsedData;
-      this.geoJson = GeoJsonGenerator.generate(this.parsedData, this.allGroupSettings);
+      if (this.projectionProj4 === '') {
+        this.geoJson = 'Please select a projection in the settings above. For example: EPSG:4326';
+        return;
+      }
+      const projection = proj4(this.projectionProj4);
+      this.geoJson = GeoJsonGenerator.generate(this.parsedData, this.allGroupSettings, projection);
     },
   },
 });

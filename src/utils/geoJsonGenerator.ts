@@ -1,3 +1,4 @@
+import proj4 from 'proj4';
 import GroupSettings from '@/utils/groupSettings';
 
 type NumericArrayObject = { [key: string]: number[] };
@@ -21,7 +22,11 @@ interface PointFeature {
 }
 
 export default class GeoJsonGenerator {
-  static generate(parsedData: string[][], allGroupSettings: GroupSettings[]): string {
+  static generate(
+    parsedData: string[][],
+    allGroupSettings: GroupSettings[],
+    projection: proj4.Converter,
+  ): string {
     const groupNumberLookupByType = GeoJsonGenerator.getGroupNumberLookupByType(allGroupSettings);
     const output = GeoJsonGenerator.generateFeatureCollection();
 
@@ -33,7 +38,11 @@ export default class GeoJsonGenerator {
       // Todo: Add linestring feature
     }
 
-    const points = GeoJsonGenerator.generatePointFeatures(parsedData, groupNumberLookupByType);
+    const points = GeoJsonGenerator.generatePointFeatures(
+      parsedData,
+      groupNumberLookupByType,
+      projection,
+    );
     output.features.push(...points);
 
     return JSON.stringify(output, null, 2);
@@ -49,15 +58,17 @@ export default class GeoJsonGenerator {
   private static generatePointFeatures(
     parsedData: string[][],
     groupNumberLookupByType: NumericArrayObject,
+    projection: proj4.Converter,
   ): PointFeature[] {
     return parsedData.reduce((result: object[], rowGroup) => {
-      const coordinate = [
-        parseFloat(rowGroup[groupNumberLookupByType.longitude[0] + 1]),
-        parseFloat(rowGroup[groupNumberLookupByType.latitude[0] + 1]),
+      let coordinate = [
+        parseFloat(rowGroup[groupNumberLookupByType.x[0] + 1]),
+        parseFloat(rowGroup[groupNumberLookupByType.y[0] + 1]),
       ];
       if (Number.isNaN(coordinate[0]) || Number.isNaN(coordinate[1])) {
         return result;
       }
+      coordinate = projection.inverse(coordinate);
       const properties: Properties = {};
       if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
         properties.time = rowGroup[groupNumberLookupByType.time[0] + 1];
@@ -99,8 +110,8 @@ export default class GeoJsonGenerator {
   }
 
   private static hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'longitude')
-      && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'latitude');
+    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'x')
+      && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'y');
   }
 
   private static hasTimeDefined(matchGroupTypeLookup: NumericArrayObject): boolean {

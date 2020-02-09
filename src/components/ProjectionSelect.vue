@@ -143,7 +143,7 @@ export default Vue.extend({
     const selectedProjection = this.epsgIndex.getProjectionByCode(this.selectedEpsgCode);
     if (selectedProjection !== null) {
       this.selectedName = selectedProjection.name;
-      this.$emit('update:selectedProj4', selectedProjection.code);
+      this.$emit('update:selectedProj4', selectedProjection.proj4);
     }
     inputField.value = this.selectedLabel;
   },

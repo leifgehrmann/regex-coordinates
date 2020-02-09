@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/debounce": "^1.2.0",
     "@types/jest": "^25.1.1",
+    "@types/proj4": "^2.5.0",
     "@types/vue-clickaway": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@vue/cli-plugin-babel": "^4.1.2",

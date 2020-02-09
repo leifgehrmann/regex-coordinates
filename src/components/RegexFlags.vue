@@ -10,7 +10,7 @@
     <div class="dropdown-container">
       <div
         v-if="showDropdown"
-        v-on-clickaway="dismiss"
+        v-click-outside="dismiss"
         class="dropdown"
       >
         <ul>
@@ -33,10 +33,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mixin as clickaway } from 'vue-clickaway';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFlag, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import vClickOutside from 'v-click-outside';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 
 library.add(faFlag);
@@ -47,7 +47,9 @@ export default Vue.extend({
   components: {
     FontAwesomeIcon,
   },
-  mixins: [clickaway],
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   props: {
     flags: {
       type: Object,

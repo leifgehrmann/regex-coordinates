@@ -61,13 +61,14 @@ export default class GeoJsonGenerator {
     projection: proj4.Converter,
   ): PointFeature[] {
     return parsedData.reduce((result: object[], rowGroup) => {
-      const coordinate = projection.inverse([
-        parseFloat(rowGroup[groupNumberLookupByType.longitude[0] + 1]),
-        parseFloat(rowGroup[groupNumberLookupByType.latitude[0] + 1]),
-      ]);
+      let coordinate = [
+        parseFloat(rowGroup[groupNumberLookupByType.x[0] + 1]),
+        parseFloat(rowGroup[groupNumberLookupByType.y[0] + 1]),
+      ];
       if (Number.isNaN(coordinate[0]) || Number.isNaN(coordinate[1])) {
         return result;
       }
+      coordinate = projection.inverse(coordinate);
       const properties: Properties = {};
       if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
         properties.time = rowGroup[groupNumberLookupByType.time[0] + 1];
@@ -109,8 +110,8 @@ export default class GeoJsonGenerator {
   }
 
   private static hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'longitude')
-      && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'latitude');
+    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'x')
+      && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'y');
   }
 
   private static hasTimeDefined(matchGroupTypeLookup: NumericArrayObject): boolean {

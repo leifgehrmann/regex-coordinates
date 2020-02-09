@@ -72,6 +72,7 @@
             <GroupSettingsTable
               :regex-string="!regexHasError ? regex : null"
               :regex-match-all-result="allMatchGroupsResult"
+              :is-wgs84="projectionEpsgCode === '4326'"
               :all-group-settings.sync="allGroupSettings"
             />
           </div>
@@ -184,8 +185,8 @@ export default Vue.extend({
       this.allGroupSettings = [
         { type: null },
         { type: null },
-        { type: 'latitude' },
-        { type: 'longitude' },
+        { type: 'y' },
+        { type: 'x' },
       ];
       this.projectionEpsgCode = '4326';
       this.projectionSearchInput = '4326';

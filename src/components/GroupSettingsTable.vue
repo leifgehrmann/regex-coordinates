@@ -18,6 +18,7 @@
       <td>{{ item.groupNumber }}</td>
       <td>
         <MatchGroupTypeSelect
+          :is-wgs84="isWgs84"
           :value.sync="item.groupSettings.type"
         />
       </td>
@@ -87,6 +88,10 @@ export default Vue.extend({
     regexMatchAllResult: {
       type: Array as () => RegExpMatchArray[],
       default: (): RegExpMatchArray[] => [],
+    },
+    isWgs84: {
+      type: Boolean,
+      default: (): boolean => false,
     },
     allGroupSettings: {
       type: Array as () => GroupSettingsArray,

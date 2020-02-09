@@ -1,6 +1,6 @@
 <template>
   <div
-    v-click-outside="focusout"
+    v-click-outside="focusoutAndBlur"
   >
     <div class="container">
       <input
@@ -165,6 +165,11 @@ export default Vue.extend({
       const inputField = this.getSearchInputField();
       inputField.value = this.selectedLabel;
       inputField.setSelectionRange(0, inputField.value.length);
+    },
+    focusoutAndBlur(): void {
+      this.focusout();
+      const inputField = this.getSearchInputField();
+      inputField.blur();
     },
     selectProjection(projection: Projection, index: number): void {
       this.$emit('update:selectedEpsgCode', projection.code);

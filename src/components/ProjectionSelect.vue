@@ -1,6 +1,6 @@
 <template>
   <div
-    v-on-clickaway="focusout"
+    v-click-outside="focusout"
   >
     <div class="container">
       <input
@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mixin as clickaway } from 'vue-clickaway';
+import vClickOutside from 'v-click-outside';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faTimesCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -86,7 +86,9 @@ export default Vue.extend({
   components: {
     FontAwesomeIcon,
   },
-  mixins: [clickaway],
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   props: {
     selectedEpsgCode: {
       type: String,
@@ -294,6 +296,10 @@ export default Vue.extend({
   width: 16px;
   height: 16px;
   opacity: 0.8;
+}
+
+.svg-inline--fa.fa-times-circle {
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: dark) {

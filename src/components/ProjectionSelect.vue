@@ -1,6 +1,6 @@
 <template>
   <div
-    v-click-outside="focusoutAndBlur"
+    v-click-outside="focusout"
   >
     <div class="container">
       <input
@@ -164,19 +164,18 @@ export default Vue.extend({
       this.searching = false;
       const inputField = this.getSearchInputField();
       inputField.value = this.selectedLabel;
-      inputField.setSelectionRange(0, inputField.value.length);
     },
-    focusoutAndBlur(): void {
+    focusoutButSelect(): void {
       this.focusout();
       const inputField = this.getSearchInputField();
-      inputField.blur();
+      inputField.setSelectionRange(0, inputField.value.length);
     },
     selectProjection(projection: Projection, index: number): void {
       this.$emit('update:selectedEpsgCode', projection.code);
       this.$emit('update:selectedProj4', projection.proj4);
       this.current = index;
       this.selectedName = projection.name;
-      this.focusout();
+      this.focusoutButSelect();
     },
     clearProjection(): void {
       this.$emit('update:selectedEpsgCode', '');
@@ -205,7 +204,7 @@ export default Vue.extend({
         if (this.current < this.matches.length && this.current >= 0) {
           this.selectProjection(this.matches[this.current], this.current);
         } else {
-          this.focusout();
+          this.focusoutButSelect();
         }
       } else {
         this.focusin();

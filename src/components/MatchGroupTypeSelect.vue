@@ -1,17 +1,41 @@
 <template>
-  <div>
-    <v-select
-      :items="options"
-      :menu-props="{ top: true, offsetY: true }"
-      dense
-      :value="value"
-      @change="update"
-    />
+  <div
+    v-click-outside="focusout"
+  >
+    <div class="container">
+      <input
+        class="search-input"
+        type="text"
+        placeholder=""
+        @focusin="focusin"
+        @keydown.enter="enter"
+        @keydown.down="down"
+        @keydown.up="up"
+        @input="searchUpdate"
+      >
+    </div>
+    <div
+      v-if="searching"
+      class="search-results-container"
+    >
+      <div class="search-results">
+        <ul class="search-results-list">
+          <li
+            v-for="(option, index) in options"
+            :key="index"
+            class="search-results-list-item"
+          >
+            {{ option.text }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import vClickOutside from 'v-click-outside';
 
 interface SelectOption {
   value: string|null;
@@ -20,6 +44,9 @@ interface SelectOption {
 
 export default Vue.extend({
   name: 'MatchGroupTypeSelect',
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   props: {
     isWgs84: {
       type: Boolean,
@@ -29,6 +56,11 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      searching: false,
+    };
   },
   computed: {
     options(): SelectOption[] {
@@ -54,12 +86,114 @@ export default Vue.extend({
     update(value: string): void {
       this.$emit('update:value', value);
     },
+    focusin(): void {
+      console.log('focusin');
+      this.searching = true;
+    },
+    focusout(): void {
+      console.log('focusout');
+      this.searching = false;
+    },
+    enter(): void {
+      console.log('enter');
+    },
+    down(): void {
+      console.log('down');
+    },
+    up(): void {
+      console.log('up');
+    },
+    searchUpdate(): void {
+      console.log('searchUpdate');
+    },
   },
 });
 </script>
 
 <style scoped>
-div {
+.container {
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+  0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background: #FFFFFF;
+  position: relative;
+  padding: 0;
+}
+
+.search-input {
   max-width: 270px;
+  border-radius: 4px;
+  padding-left: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.clear-button {
+  display: inline-block;
+  position: absolute;
+  right: 7px;
+  top: 6px;
+}
+
+.search-results-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+}
+
+.search-results {
+  background: #FFF;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  position: absolute;
+  top: 5px;
+  z-index: 10;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.search-results ul {
+  list-style: none;
+  padding: 4px 0;
+}
+
+.search-results ul li {
+  cursor: pointer;
+  padding: 2px 8px 2px 8px;
+}
+
+.search-result-list-item-selected {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.search-results-epsg-io a {
+  text-decoration: none;
+}
+
+.svg-inline--fa {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+.svg-inline--fa.fa-times-circle {
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #212121;
+  }
+
+  .search-results {
+    background: #212121;
+  }
+
+  .search-result-list-item-selected {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 </style>

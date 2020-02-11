@@ -232,6 +232,8 @@ th {
 }
 
 tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 

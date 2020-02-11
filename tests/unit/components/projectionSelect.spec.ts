@@ -2,7 +2,8 @@ import { mount, Wrapper } from '@vue/test-utils';
 import ProjectionSelect from '@/components/ProjectionSelect.vue';
 
 function hasNSearchResultItems(
-  wrapper: Wrapper<ProjectionSelect>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  wrapper: Wrapper<any>,
   expectedResults: number,
 ): void {
   const results = wrapper.element.getElementsByClassName('search-results-list-item');

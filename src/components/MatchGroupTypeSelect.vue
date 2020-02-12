@@ -2,18 +2,6 @@
   <div
     v-click-outside="focusout"
   >
-<!--    <div class="container">-->
-<!--      <input-->
-<!--        class="search-input"-->
-<!--        type="text"-->
-<!--        placeholder=""-->
-<!--        @focusin="focusin"-->
-<!--        @keydown.enter="enter"-->
-<!--        @keydown.down="down"-->
-<!--        @keydown.up="up"-->
-<!--        @input="searchUpdate"-->
-<!--      >-->
-<!--    </div>-->
     <popper
       trigger="click"
       :visible-arrow="false"
@@ -23,6 +11,18 @@
         'boundaries-selector': 'v-application'
       }"
     >
+      <input
+        slot="reference"
+        class="search-input"
+        type="text"
+        placeholder=""
+        @focusin="focusin"
+        @keydown.enter="enter"
+        @keydown.down="down"
+        @keydown.up="up"
+        @keydown.tab="focusout"
+        @input="searchUpdate"
+      >
       <div class="popper">
         <div class="search-results">
           <ul class="search-results-list">
@@ -36,35 +36,7 @@
           </ul>
         </div>
       </div>
-
-      <input slot="reference"
-        class="search-input"
-        type="text"
-        placeholder=""
-        @focusin="focusin"
-        @keydown.enter="enter"
-        @keydown.down="down"
-        @keydown.up="up"
-        @keydown.tab="focusout"
-        @input="searchUpdate"
-      >
     </popper>
-<!--    <div-->
-<!--      v-if="searching"-->
-<!--      class="search-results-container"-->
-<!--    >-->
-<!--      <div class="search-results">-->
-<!--        <ul class="search-results-list">-->
-<!--          <li-->
-<!--            v-for="(option, index) in options"-->
-<!--            :key="index"-->
-<!--            class="search-results-list-item"-->
-<!--          >-->
-<!--            {{ option.text }}-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
 </template>
 

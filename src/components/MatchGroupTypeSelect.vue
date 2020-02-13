@@ -33,6 +33,11 @@
             >
               {{ option.text }}
             </li>
+            <li
+              v-if="bla > 0.5"
+            >
+              Hello!
+            </li>
           </ul>
         </div>
       </div>
@@ -71,6 +76,7 @@ export default Vue.extend({
   data() {
     return {
       searching: false,
+      bla: 0,
     };
   },
   computed: {
@@ -116,6 +122,7 @@ export default Vue.extend({
     },
     searchUpdate(): void {
       console.log('searchUpdate');
+      this.bla = Math.random();
     },
   },
 });

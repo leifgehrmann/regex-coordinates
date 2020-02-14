@@ -33,11 +33,6 @@
             >
               {{ option.text }}
             </li>
-            <li
-              v-if="bla > 0.5"
-            >
-              Hello!
-            </li>
           </ul>
         </div>
       </div>
@@ -76,30 +71,31 @@ export default Vue.extend({
   data() {
     return {
       searching: false,
-      bla: 0,
+      searchTerm: '',
     };
   },
   computed: {
     options(): SelectOption[] {
-      if (this.isWgs84) {
-        return [
-          { value: null, text: '' },
-          { value: 'x', text: 'Longitude (Decimal)' },
-          { value: 'y', text: 'Latitude (Decimal)' },
-          { value: 'name', text: 'Category name' },
-          { value: 'time', text: 'Time' },
-        ];
+      const options: SelectOption[] = [];
+      options.push({ value: null, text: ' ' });
+      if (this.searchTerm !== '') {
+        options.push({ value: `custom:${this.searchTerm}`, text: `Custom: ${this.searchTerm}` });
       }
-      return [
-        { value: null, text: '' },
-        { value: 'x', text: 'X Coordinate' },
-        { value: 'y', text: 'Y Coordinate' },
-        { value: 'name', text: 'Category name' },
-        { value: 'time', text: 'Time' },
-      ];
+      if (this.isWgs84) {
+        options.push({ value: 'x', text: 'Longitude (Decimal)' });
+        options.push({ value: 'y', text: 'Latitude (Decimal)' });
+      } else {
+        options.push({ value: 'x', text: 'X Coordinate' });
+        options.push({ value: 'y', text: 'Y Coordinate' });
+      }
+      return options;
     },
   },
   methods: {
+    getSearchInputField(): HTMLInputElement {
+      const elements = this.$el.getElementsByClassName('search-input');
+      return elements.item(0) as HTMLInputElement;
+    },
     update(value: string): void {
       this.$emit('update:value', value);
     },
@@ -122,7 +118,8 @@ export default Vue.extend({
     },
     searchUpdate(): void {
       console.log('searchUpdate');
-      this.bla = Math.random();
+      const inputField = this.getSearchInputField();
+      this.searchTerm = inputField.value;
     },
   },
 });

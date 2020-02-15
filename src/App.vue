@@ -67,6 +67,7 @@
           <h2>Step 4. Capture Group Settings</h2>
           <p class="body-2">
             For each capture group in the regular expression, select the appropriate type.
+            A custom type can be made by entering your own value in the field.
           </p>
           <div class="horizontally-scroll-container">
             <GroupSettingsTable

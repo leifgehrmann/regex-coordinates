@@ -11,18 +11,29 @@
         'boundaries-selector': 'v-application'
       }"
     >
-      <input
+      <div
         slot="reference"
-        class="search-input"
-        type="text"
-        placeholder=""
-        @focusin="focusin"
-        @keydown.enter="enter"
-        @keydown.down="down"
-        @keydown.up="up"
-        @keydown.tab="focusout"
-        @input="searchUpdate"
+        class="container"
       >
+        <input
+          class="search-input"
+          type="text"
+          placeholder=""
+          @focusin="focusin"
+          @keydown.enter="enter"
+          @keydown.down="down"
+          @keydown.up="up"
+          @keydown.tab="focusout"
+          @input="searchUpdate"
+        >
+        <div class="dropdown-icon">
+          <font-awesome-icon
+            icon="chevron-down"
+            :style="{visibility: searching}"
+            @click="focusin"
+          />
+        </div>
+      </div>
       <div class="popper">
         <div class="search-results">
           <ul class="search-results-list">
@@ -44,6 +55,11 @@
 import Vue from 'vue';
 import vClickOutside from 'v-click-outside';
 import Popper from 'vue-popperjs';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faChevronDown);
 
 interface SelectOption {
   value: string|null;
@@ -57,6 +73,7 @@ export default Vue.extend({
   },
   components: {
     Popper,
+    FontAwesomeIcon
   },
   props: {
     isWgs84: {
@@ -144,11 +161,12 @@ export default Vue.extend({
   padding-bottom: 5px;
 }
 
-.clear-button {
+.dropdown-icon {
   display: inline-block;
   position: absolute;
   right: 7px;
   top: 6px;
+  cursor: pointer;
 }
 
 .search-results-container {

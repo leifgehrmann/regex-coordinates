@@ -40,7 +40,10 @@
             <li
               v-for="(option, index) in options"
               :key="index"
+              :class="{ 'search-result-list-item-selected': index === current }"
               class="search-results-list-item"
+              @click="selectOption(option, index)"
+              @mousemove="current = index"
             >
               {{ option.text }}
             </li>
@@ -87,16 +90,18 @@ export default Vue.extend({
   },
   data() {
     return {
+      customPrefix: 'custom:',
       searching: false,
-      searchTerm: '',
+      rawInput: '',
+      current: 0,
     };
   },
   computed: {
     options(): SelectOption[] {
       const options: SelectOption[] = [];
-      options.push({ value: null, text: ' ' });
-      if (this.searchTerm !== '') {
-        options.push({ value: `custom:${this.searchTerm}`, text: `Custom: ${this.searchTerm}` });
+      options.push({ value: null, text: '' });
+      if (this.rawInput !== '') {
+        options.push({ value: `${this.customPrefix}${this.rawInput}`, text: `Custom: ${this.rawInput}` });
       }
       if (this.isWgs84) {
         options.push({ value: 'x', text: 'Longitude (Decimal)' });
@@ -108,6 +113,21 @@ export default Vue.extend({
       return options;
     },
   },
+  mounted() {
+    if (this.value === null) {
+      return;
+    }
+
+    const inputField = this.getSearchInputField();
+    if (this.value.startsWith(this.customPrefix)) {
+      this.rawInput = this.value.substr(this.customPrefix.length);
+      inputField.value = `Custom: ${this.rawInput}`;
+    } else {
+      this.rawInput = '';
+      const optionIndex = this.options.findIndex((option) => option.value === this.value);
+      inputField.value = this.options[optionIndex].text;
+    }
+  },
   methods: {
     getSearchInputField(): HTMLInputElement {
       const elements = this.$el.getElementsByClassName('search-input');
@@ -118,11 +138,16 @@ export default Vue.extend({
     },
     focusin(): void {
       console.log('focusin');
+      const inputField = this.getSearchInputField();
+      inputField.focus();
       this.searching = true;
     },
     focusout(): void {
       console.log('focusout');
       this.searching = false;
+    },
+    selectOption(option: string, index: number): void {
+      console.log('select', option, index);
     },
     enter(): void {
       console.log('enter');
@@ -136,7 +161,7 @@ export default Vue.extend({
     searchUpdate(): void {
       console.log('searchUpdate');
       const inputField = this.getSearchInputField();
-      this.searchTerm = inputField.value;
+      this.rawInput = inputField.value;
     },
   },
 });
@@ -247,7 +272,7 @@ export default Vue.extend({
   z-index: 20;
   max-height: 400px;
   overflow-y: scroll;
-  width: 170px;
+  min-width: 170px;
 }
 
 .popper .search-results ul {
@@ -276,5 +301,16 @@ export default Vue.extend({
 
 .svg-inline--fa.fa-times-circle {
   cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+
+  .popper .search-results {
+    background: #212121;
+  }
+
+  .popper .search-result-list-item-selected {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 </style>

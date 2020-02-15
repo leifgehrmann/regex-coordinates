@@ -76,7 +76,7 @@ export default Vue.extend({
   },
   components: {
     Popper,
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
   props: {
     isWgs84: {

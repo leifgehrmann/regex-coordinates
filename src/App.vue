@@ -20,7 +20,7 @@
         text
       >
         <span class="mr-2">GitHub</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <font-awesome-icon icon="external-link-alt" />
       </v-btn>
     </v-app-bar>
 
@@ -33,9 +33,22 @@
           <h2>Step 1. Regular Expression</h2>
           <p class="body-2">
             Create a regular expression pattern with at least two
-            <a href="https://www.regular-expressions.info/brackets.html">capture groups</a> for
-            the X and Y coordinates. Use <a href="https://regex101.com">regex101.com</a> to
-            help with creating the expression.
+            <a
+              href="https://www.regular-expressions.info/brackets.html"
+              target="_blank"
+            >
+              capture groups
+              <font-awesome-icon icon="external-link-alt" />
+            </a> for
+            the X and Y coordinates. Use
+            <a
+              href="https://regex101.com"
+              target="_blank"
+            >
+              regex101.com
+              <font-awesome-icon icon="external-link-alt" />
+            </a>
+            to help with creating the expression.
             <strong>Note:</strong> Only the JavaScript Regex Engine is supported for now.
           </p>
           <RegexInput
@@ -55,8 +68,15 @@
           <p class="body-2">
             Select the map projection the input data is in.
             By default, we assume it is latitude/longitude (WGS 84).
-            Search <a href="https://epsg.io">epsg.io</a> for information on
-            other projection systems.
+            Search
+            <a
+              href="https://epsg.io"
+              target="_blank"
+            >
+              epsg.io
+              <font-awesome-icon icon="external-link-alt" />
+            </a>
+            for information on other projection systems.
           </p>
           <ProjectionSelect
             :selected-epsg-code.sync="projectionEpsgCode"
@@ -67,6 +87,7 @@
           <h2>Step 4. Capture Group Settings</h2>
           <p class="body-2">
             For each capture group in the regular expression, select the appropriate type.
+            A custom type can be made by entering your own value in the field.
           </p>
           <div class="horizontally-scroll-container">
             <GroupSettingsTable
@@ -80,7 +101,13 @@
           <h2>Output</h2>
           <p class="body-2">
             Copy and paste the output into any GeoJSON viewer. For example,
-            <a href="http://geojson.io">geojson.io</a>
+            <a
+              href="http://geojson.io"
+              target="_blank"
+            >
+              geojson.io
+              <font-awesome-icon icon="external-link-alt" />
+            </a>
           </p>
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
@@ -92,6 +119,9 @@
 <script lang="ts">
 import proj4 from 'proj4';
 import Vue from 'vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import RegexInput from './components/RegexInput.vue';
 import DataInput from './components/DataInput.vue';
 import ProjectionSelect from './components/ProjectionSelect.vue';
@@ -103,6 +133,8 @@ import GroupSettings from '@/utils/groupSettings';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
 
+library.add(faExternalLinkAlt);
+
 export default Vue.extend({
   name: 'App',
 
@@ -112,6 +144,7 @@ export default Vue.extend({
     ProjectionSelect,
     GroupSettingsTable,
     GeoJsonOutput,
+    FontAwesomeIcon,
   },
 
   data: () => ({
@@ -184,7 +217,7 @@ export default Vue.extend({
 +-------+---------------------+----------+-----------+`;
       this.allGroupSettings = [
         { type: null },
-        { type: null },
+        { type: 'custom:time' },
         { type: 'y' },
         { type: 'x' },
       ];
@@ -214,6 +247,10 @@ export default Vue.extend({
 </script>
 
 <style>
+a {
+  text-decoration: none;
+}
+
 h2 {
   font-size: 16px;
   margin-top: 10px;

@@ -12,6 +12,7 @@
         @keydown.down="down"
         @keydown.up="up"
         @input="searchUpdate"
+        @keydown.tab="focusout"
       >
       <div class="clear-button">
         <font-awesome-icon

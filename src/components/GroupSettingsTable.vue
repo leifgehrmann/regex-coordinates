@@ -202,7 +202,7 @@ table {
 
 @media (prefers-color-scheme: dark) {
   table {
-    background-color: #424242;
+    background-color: #212121;
   }
 }
 
@@ -232,6 +232,8 @@ th {
 }
 
 tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 

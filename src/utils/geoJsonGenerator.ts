@@ -28,19 +28,17 @@ export default class GeoJsonGenerator {
     projection: proj4.Converter,
   ): string {
     const groupNumberLookupByType = GeoJsonGenerator.getGroupNumberLookupByType(allGroupSettings);
+    const customTypes = GeoJsonGenerator.getCustomTypes(allGroupSettings);
     const output = GeoJsonGenerator.generateFeatureCollection();
 
     if (!GeoJsonGenerator.hasCoordinatesDefined(groupNumberLookupByType)) {
       return 'Please select Latitude and Longitude groups above.';
     }
 
-    if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
-      // Todo: Add linestring feature
-    }
-
     const points = GeoJsonGenerator.generatePointFeatures(
       parsedData,
       groupNumberLookupByType,
+      customTypes,
       projection,
     );
     output.features.push(...points);
@@ -58,6 +56,7 @@ export default class GeoJsonGenerator {
   private static generatePointFeatures(
     parsedData: string[][],
     groupNumberLookupByType: NumericArrayObject,
+    customTypes: string[],
     projection: proj4.Converter,
   ): PointFeature[] {
     return parsedData.reduce((result: object[], rowGroup) => {
@@ -70,12 +69,11 @@ export default class GeoJsonGenerator {
       }
       coordinate = projection.inverse(coordinate);
       const properties: Properties = {};
-      if (GeoJsonGenerator.hasTimeDefined(groupNumberLookupByType)) {
-        properties.time = rowGroup[groupNumberLookupByType.time[0] + 1];
-      }
-      if (GeoJsonGenerator.hasNameDefined(groupNumberLookupByType)) {
-        properties.name = rowGroup[groupNumberLookupByType.name[0] + 1];
-      }
+      customTypes.forEach((customType) => {
+        const propertyName = customType.substr('custom:'.length);
+        properties[propertyName] = rowGroup[groupNumberLookupByType[customType][0] + 1];
+      });
+
       result.push(GeoJsonGenerator.generatePointFeature(coordinate, properties));
       return result;
     }, []) as PointFeature[];
@@ -109,17 +107,22 @@ export default class GeoJsonGenerator {
     return groupNumberLookupByType;
   }
 
+  private static getCustomTypes(allGroupSettings: GroupSettings[]): string[] {
+    const customTypes: string[] = [];
+    allGroupSettings.forEach((groupSettings) => {
+      if (groupSettings.type === null) {
+        return;
+      }
+      if (groupSettings.type.startsWith('custom:')) {
+        customTypes.push(groupSettings.type);
+      }
+    });
+    return customTypes;
+  }
+
   private static hasCoordinatesDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
     return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'x')
       && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'y');
-  }
-
-  private static hasTimeDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'time');
-  }
-
-  private static hasNameDefined(matchGroupTypeLookup: NumericArrayObject): boolean {
-    return GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'name');
   }
 
   private static objectHasProperty(obj: object, prop: string): boolean {

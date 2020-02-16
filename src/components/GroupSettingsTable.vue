@@ -202,7 +202,7 @@ table {
 
 @media (prefers-color-scheme: dark) {
   table {
-    background-color: #424242;
+    background-color: #212121;
   }
 }
 

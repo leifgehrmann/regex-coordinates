@@ -126,16 +126,13 @@ export default Vue.extend({
     isWgs84(): void {
       this.displaySelected();
     },
+    value(): void {
+      this.updateExternally();
+      this.displaySelected();
+    },
   },
   mounted() {
-    if (this.value !== null) {
-      this.rawValue = this.value;
-      if (this.rawValue.startsWith(this.customPrefix)) {
-        this.current = 1;
-        this.rawInput = this.rawValue.substr(this.customPrefix.length);
-      }
-      this.current = this.options.findIndex((option) => option.value === this.rawValue);
-    }
+    this.updateExternally();
     this.displaySelected();
   },
   methods: {
@@ -159,6 +156,16 @@ export default Vue.extend({
     displayRaw(): void {
       const inputField = this.getSearchInputField();
       inputField.value = this.rawInput;
+    },
+    updateExternally(): void {
+      if (this.value !== null) {
+        this.rawValue = this.value;
+        if (this.rawValue.startsWith(this.customPrefix)) {
+          this.current = 1;
+          this.rawInput = this.rawValue.substr(this.customPrefix.length);
+        }
+        this.current = this.options.findIndex((option) => option.value === this.rawValue);
+      }
     },
     update(value: string, index: number): void {
       this.$emit('update:value', value);

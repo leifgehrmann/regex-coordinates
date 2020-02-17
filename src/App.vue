@@ -270,4 +270,10 @@ h2 {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+@media (prefers-color-scheme: dark) {
+  .v-content {
+    background-color: #121212;
+  }
+}
 </style>

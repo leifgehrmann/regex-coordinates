@@ -109,6 +109,8 @@
               <font-awesome-icon icon="external-link-alt" />
             </a>
           </p>
+          <DownloadOutputButton :value="geoJson" />
+          <CopyOutputButton :value="geoJson" />
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
@@ -132,6 +134,8 @@ import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
+import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
+import CopyOutputButton from '@/components/CopyOutputButton.vue';
 
 library.add(faExternalLinkAlt);
 
@@ -143,6 +147,8 @@ export default Vue.extend({
     DataInput,
     ProjectionSelect,
     GroupSettingsTable,
+    DownloadOutputButton,
+    CopyOutputButton,
     GeoJsonOutput,
     FontAwesomeIcon,
   },
@@ -257,10 +263,20 @@ h2 {
   margin-bottom: 10px;
 }
 
+.v-content {
+  background-color: #F6F6F6;
+}
+
 .horizontally-scroll-container {
   display: block;
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-color-scheme: dark) {
+  .v-content {
+    background-color: #121212;
+  }
 }
 </style>

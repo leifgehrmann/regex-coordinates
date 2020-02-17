@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { mount, Wrapper } from '@vue/test-utils';
 import MatchGroupTypeSelect from '@/components/MatchGroupTypeSelect.vue';
 
@@ -54,11 +55,14 @@ describe('MatchGroupTypeSelect', () => {
   });
 
   test('Focus changes displayed value in input field', async () => {
+    // The following console error would normally be reported in the logs:
+    // "[Vue warn]: Error in nextTick: "TypeError: document.createRange is not a function""
+    // This is because of how vue-test-utils mocks the document.
+    // Since we've mocked it in this test, the error should not appear in the logs.
+    console.error = jest.fn();
     wrapper.find('.search-input').trigger('focusin');
-    // A console error: "[Vue warn]: Error in nextTick: "Error: Range is mocked""
-    // will be reported in the logs... which can be ignored, because the document
-    // is only partially implemented by vue-test-utils.
     await wrapper.vm.$nextTick();
+    expect(console.error).toHaveBeenCalled();
     expect(getInputField(wrapper).value).toEqual('My "Custom" Name');
   });
 

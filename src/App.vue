@@ -257,6 +257,10 @@ h2 {
   margin-bottom: 10px;
 }
 
+.v-content {
+  background-color: #F6F6F6;
+}
+
 .horizontally-scroll-container {
   display: block;
   width: 100%;

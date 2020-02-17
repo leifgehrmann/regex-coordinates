@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@types/codemirror": "0.0.85",
     "codemirror": "^5.51.0",
+    "copy-to-clipboard": "^3.2.1",
     "core-js": "^3.6.4",
     "debounce": "^1.2.0",
     "epsg-index": "^1.0.0",

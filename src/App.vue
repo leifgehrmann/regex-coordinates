@@ -110,6 +110,7 @@
             </a>
           </p>
           <DownloadOutputButton :value="geoJson" />
+          <CopyOutputButton :value="geoJson" />
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
@@ -134,6 +135,7 @@ import GroupSettings from '@/utils/groupSettings';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
+import CopyOutputButton from '@/components/CopyOutputButton.vue';
 
 library.add(faExternalLinkAlt);
 
@@ -146,6 +148,7 @@ export default Vue.extend({
     ProjectionSelect,
     GroupSettingsTable,
     DownloadOutputButton,
+    CopyOutputButton,
     GeoJsonOutput,
     FontAwesomeIcon,
   },

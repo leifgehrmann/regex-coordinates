@@ -109,6 +109,7 @@
               <font-awesome-icon icon="external-link-alt" />
             </a>
           </p>
+          <DownloadOutputButton :value="geoJson" />
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
@@ -132,6 +133,7 @@ import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
 import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
+import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 
 library.add(faExternalLinkAlt);
 
@@ -143,6 +145,7 @@ export default Vue.extend({
     DataInput,
     ProjectionSelect,
     GroupSettingsTable,
+    DownloadOutputButton,
     GeoJsonOutput,
     FontAwesomeIcon,
   },

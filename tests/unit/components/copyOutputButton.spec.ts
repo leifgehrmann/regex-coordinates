@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { mount, Wrapper } from '@vue/test-utils';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
 
@@ -27,8 +28,10 @@ describe('CopyOutputButton', () => {
   });
 
   test('copies to clipboard', async () => {
+    console.error = jest.fn();
     wrapper.find('.copy-output-button').trigger('click');
     await wrapper.vm.$nextTick();
+    expect(console.error).toHaveBeenCalled();
     expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
     await new Promise((resolve) => setTimeout(() => {
       expect(getLabel(wrapper).textContent).toEqual('Copy to clipboard');

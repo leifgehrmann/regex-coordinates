@@ -185,7 +185,7 @@ export default Vue.extend({
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],
     allGroupSettings: [] as GroupSettings[],
-    outputSettingsFeatureType: 'points',
+    outputSettingsFeatureType: '',
     outputSettingsGroupBy: '',
     outputSettingsOrderBy: '',
     geoJson: '',
@@ -253,6 +253,9 @@ export default Vue.extend({
         unicode: false,
         sticky: false,
       };
+      this.outputSettingsFeatureType = 'both';
+      this.outputSettingsGroupBy = '';
+      this.outputSettingsOrderBy = 'custom:time';
     },
     updateEverything(): void {
       this.parsedData = this.parser.parse(this.data);

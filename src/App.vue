@@ -98,6 +98,17 @@
             />
           </div>
 
+          <h2>Step 5. Output Settings</h2>
+          <p class="body-2">
+            Select whether or not the output should consist of points, linestrings, or both.
+          </p>
+          <OutputSettings
+            :all-group-settings="allGroupSettings"
+            :feature-type.sync="outputSettingsFeatureType"
+            :group-by.sync="outputSettingsGroupBy"
+            :order-by.sync="outputSettingsOrderBy"
+          />
+
           <h2>Output</h2>
           <p class="body-2">
             Copy and paste the output into any GeoJSON viewer. For example,
@@ -136,6 +147,7 @@ import RegExpFlagsConfig from '@/utils/regExpFlagsConfig';
 import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
+import OutputSettings from '@/components/OutputSettings.vue';
 
 library.add(faExternalLinkAlt);
 
@@ -147,6 +159,7 @@ export default Vue.extend({
     DataInput,
     ProjectionSelect,
     GroupSettingsTable,
+    OutputSettings,
     DownloadOutputButton,
     CopyOutputButton,
     GeoJsonOutput,
@@ -172,6 +185,9 @@ export default Vue.extend({
     parsedData: [] as RegExpMatchArray[],
     allMatchGroupsResult: [] as string[][],
     allGroupSettings: [] as GroupSettings[],
+    outputSettingsFeatureType: 'points',
+    outputSettingsGroupBy: '',
+    outputSettingsOrderBy: '',
     geoJson: '',
   }),
   computed: {

@@ -211,6 +211,15 @@ export default Vue.extend({
     projectionProj4(): void {
       this.updateEverything();
     },
+    outputSettingsFeatureType(): void {
+      this.updateEverything();
+    },
+    outputSettingsGroupBy(): void {
+      this.updateEverything();
+    },
+    outputSettingsOrderBy(): void {
+      this.updateEverything();
+    },
     allGroupSettings: {
       handler(): void {
         this.updateEverything();
@@ -265,7 +274,14 @@ export default Vue.extend({
         return;
       }
       const projection = proj4(this.projectionProj4);
-      this.geoJson = GeoJsonGenerator.generate(this.parsedData, this.allGroupSettings, projection);
+      this.geoJson = GeoJsonGenerator.generate(
+        this.parsedData,
+        this.allGroupSettings,
+        projection,
+        this.outputSettingsFeatureType,
+        this.outputSettingsGroupBy,
+        this.outputSettingsOrderBy,
+      );
     },
   },
 });

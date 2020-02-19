@@ -7,21 +7,39 @@
         type="radio"
         value="points"
       >
-      <label for="points">Points</label>
+      <label for="points">
+        <FeatureTypeGraphic
+          feature-type="points"
+          :selected="mountedFeatureType==='points'"
+        />
+        Points
+      </label>
       <input
         id="both"
         v-model="mountedFeatureType"
         type="radio"
         value="both"
       >
-      <label for="both">Both</label>
+      <label for="both">
+        <FeatureTypeGraphic
+          feature-type="both"
+          :selected="mountedFeatureType==='both'"
+        />
+        Both
+      </label>
       <input
         id="linestring"
         v-model="mountedFeatureType"
         type="radio"
         value="linestring"
       >
-      <label for="linestring">Linestring</label>
+      <label for="linestring">
+        <FeatureTypeGraphic
+          feature-type="linestring"
+          :selected="mountedFeatureType==='linestring'"
+        />
+        Linestring
+      </label>
     </div>
     <div
       class="group-settings"
@@ -76,6 +94,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import GroupSettings, { GroupSettingsArray } from '@/utils/groupSettings';
+import FeatureTypeGraphic from '@/components/FeatureTypeGraphic.vue';
 
 library.add(faChevronDown);
 
@@ -88,6 +107,7 @@ export default Vue.extend({
   name: 'OutputSettings',
   components: {
     FontAwesomeIcon,
+    FeatureTypeGraphic,
   },
   props: {
     allGroupSettings: {
@@ -228,7 +248,18 @@ export default Vue.extend({
 }
 
 @media (prefers-color-scheme: dark) {
-
+  .feature-type {
+    background: #242424;
+  }
+  .feature-type input:checked + label {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .group-by, .order-by {
+    background: #181818;
+  }
+  .group-by select, .order-by select {
+    background: #242424;
+  }
 }
 
 </style>

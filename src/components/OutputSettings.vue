@@ -116,7 +116,7 @@ export default Vue.extend({
     },
     featureType: {
       type: String,
-      default: (): string => 'points',
+      default: (): string => '',
     },
     groupBy: {
       type: String,
@@ -124,7 +124,7 @@ export default Vue.extend({
     },
     orderBy: {
       type: String,
-      default: (): string => 'custom:time',
+      default: (): string => '',
     },
   },
   data: () => ({

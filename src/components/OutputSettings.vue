@@ -116,7 +116,7 @@ export default Vue.extend({
     },
     featureType: {
       type: String,
-      default: (): string => '',
+      default: (): string => 'points',
     },
     groupBy: {
       type: String,

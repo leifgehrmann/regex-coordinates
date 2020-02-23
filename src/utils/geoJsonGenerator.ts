@@ -5,7 +5,7 @@ type NumericArrayObject = { [key: string]: number[] };
 
 interface FeatureCollection {
   type: string;
-  features: PointFeature[];
+  features: (PointFeature|LineStringFeature)[];
 }
 
 interface Properties {
@@ -21,11 +21,23 @@ interface PointFeature {
   };
 }
 
+interface LineStringFeature {
+  type: 'Feature';
+  properties: object;
+  geometry: {
+    type: 'LineString';
+    coordinates: number[][];
+  };
+}
+
 export default class GeoJsonGenerator {
   static generate(
     parsedData: string[][],
     allGroupSettings: GroupSettings[],
     projection: proj4.Converter,
+    featureType: string,
+    groupBy: string,
+    orderBy: string,
   ): string {
     const groupNumberLookupByType = GeoJsonGenerator.getGroupNumberLookupByType(allGroupSettings);
     const customTypes = GeoJsonGenerator.getCustomTypes(allGroupSettings);
@@ -35,13 +47,26 @@ export default class GeoJsonGenerator {
       return 'Please select Latitude and Longitude groups above.';
     }
 
-    const points = GeoJsonGenerator.generatePointFeatures(
-      parsedData,
-      groupNumberLookupByType,
-      customTypes,
-      projection,
-    );
-    output.features.push(...points);
+    if (featureType === 'points' || featureType === 'both') {
+      const points = GeoJsonGenerator.generatePointFeatures(
+        parsedData,
+        groupNumberLookupByType,
+        customTypes,
+        projection,
+      );
+      output.features.push(...points);
+    }
+
+    if (featureType === 'linestring' || featureType === 'both') {
+      const lineStrings = GeoJsonGenerator.generateLineStringFeatures(
+        parsedData,
+        groupNumberLookupByType,
+        projection,
+        groupBy,
+        orderBy,
+      );
+      output.features.push(...lineStrings);
+    }
 
     return JSON.stringify(output, null, 2);
   }
@@ -79,6 +104,79 @@ export default class GeoJsonGenerator {
     }, []) as PointFeature[];
   }
 
+  private static generateLineStringFeatures(
+    parsedData: string[][],
+    groupNumberLookupByType: NumericArrayObject,
+    projection: proj4.Converter,
+    groupBy: string,
+    orderBy: string,
+  ): LineStringFeature[] {
+    let groupByName: string|null = null;
+    let groupByIndex: number|null = null;
+    if (groupBy !== '') {
+      groupByName = groupBy.substr('custom:'.length);
+      groupByIndex = groupNumberLookupByType[groupBy][0] + 1;
+    }
+    let orderByIndex: number|null = null;
+    if (orderBy !== '') {
+      orderByIndex = groupNumberLookupByType[orderBy][0] + 1;
+    }
+    const coordinatesWithOrderByValueByGroupByValue:
+      {[key: string]: {coordinate: number[]; orderByValue: string}[]} = {};
+    parsedData.forEach((rowGroup) => {
+      let coordinate = [
+        parseFloat(rowGroup[groupNumberLookupByType.x[0] + 1]),
+        parseFloat(rowGroup[groupNumberLookupByType.y[0] + 1]),
+      ];
+      if (Number.isNaN(coordinate[0]) || Number.isNaN(coordinate[1])) {
+        return;
+      }
+      coordinate = projection.inverse(coordinate);
+
+      let groupByValue = '-';
+      if (groupByIndex !== null) {
+        groupByValue = rowGroup[groupByIndex];
+      }
+
+      let orderByValue = '-';
+      if (orderByIndex !== null) {
+        orderByValue = rowGroup[orderByIndex];
+      }
+
+      if (!(groupByValue in coordinatesWithOrderByValueByGroupByValue)) {
+        coordinatesWithOrderByValueByGroupByValue[groupByValue] = [];
+      }
+      coordinatesWithOrderByValueByGroupByValue[groupByValue].push({ coordinate, orderByValue });
+    });
+
+    const results: LineStringFeature[] = [];
+    Object.entries(coordinatesWithOrderByValueByGroupByValue)
+      .forEach((coordinatesWithOrderByValueWithGroupByValue) => {
+        const groupByValue = coordinatesWithOrderByValueWithGroupByValue[0];
+        const coordinatesWithOrderByValue = coordinatesWithOrderByValueWithGroupByValue[1];
+        coordinatesWithOrderByValue.sort((a, b) => {
+          const orderByValueA = a.orderByValue;
+          const orderByValueB = b.orderByValue;
+          if (orderByValueA < orderByValueB) {
+            return -1;
+          }
+          if (orderByValueA > orderByValueB) {
+            return 1;
+          }
+          return 0;
+        });
+        const coordinates = coordinatesWithOrderByValue.map(
+          (coordinateWithOrderByValue) => coordinateWithOrderByValue.coordinate,
+        );
+        const properties: {[key: string]: string} = {};
+        if (groupByName !== null) {
+          properties[groupByName] = groupByValue;
+        }
+        results.push(GeoJsonGenerator.generateLineStringFeature(coordinates, properties));
+      });
+    return results;
+  }
+
   private static generatePointFeature(coordinate: number[], properties: Properties): PointFeature {
     return {
       type: 'Feature',
@@ -89,6 +187,20 @@ export default class GeoJsonGenerator {
           coordinate[0],
           coordinate[1],
         ],
+      },
+    };
+  }
+
+  private static generateLineStringFeature(
+    coordinates: number[][],
+    properties: Properties = {},
+  ): LineStringFeature {
+    return {
+      type: 'Feature',
+      properties,
+      geometry: {
+        type: 'LineString',
+        coordinates,
       },
     };
   }

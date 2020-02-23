@@ -45,12 +45,11 @@ import Vue from 'vue';
 import MatchGroupTypeSelect from '@/components/MatchGroupTypeSelect.vue';
 import RegExpMatchArrayInverter from '../utils/regExpMatchArrayInverter';
 import RegExpUnescape from '@/utils/regExpUnescape';
+import { GroupSettingsArray } from '@/utils/groupSettings';
 
 interface GroupSettings {
   type: string|null;
 }
-
-type GroupSettingsArray = GroupSettings[];
 
 interface Item {
   groupNumber: number;

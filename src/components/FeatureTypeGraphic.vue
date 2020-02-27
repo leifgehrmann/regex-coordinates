@@ -1,9 +1,7 @@
 <template>
   <div>
     <svg
-      width="100px"
-      height="70px"
-      viewBox="0 0 51 34"
+      viewBox="0 0 51 55"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -96,7 +94,16 @@
           </g>
         </g>
       </g>
+      <text
+        x="50%"
+        y="95%"
+        text-anchor="middle"
+        style="font-size: 10px"
+      >
+        {{ featureLabel }}
+      </text>
     </svg>
+    {{ featureLabel }}
   </div>
 </template>
 
@@ -113,6 +120,10 @@ export default Vue.extend({
     featureType: {
       type: String,
       default: 'both',
+    },
+    featureLabel: {
+      type: String,
+      default: 'Both',
     },
   },
   computed: {

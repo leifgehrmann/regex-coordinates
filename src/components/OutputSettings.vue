@@ -10,9 +10,9 @@
       <label for="points">
         <FeatureTypeGraphic
           feature-type="points"
+          feature-label="Points"
           :selected="mountedFeatureType==='points'"
         />
-        Points
       </label>
       <input
         id="both"
@@ -23,9 +23,9 @@
       <label for="both">
         <FeatureTypeGraphic
           feature-type="both"
+          feature-label="Both"
           :selected="mountedFeatureType==='both'"
         />
-        Both
       </label>
       <input
         id="linestring"
@@ -36,9 +36,9 @@
       <label for="linestring">
         <FeatureTypeGraphic
           feature-type="linestring"
+          feature-label="Linestring"
           :selected="mountedFeatureType==='linestring'"
         />
-        Linestring
       </label>
     </div>
     <div
@@ -184,7 +184,8 @@ export default Vue.extend({
 <style scoped>
 .feature-type {
   width: 100%;
-  display: flex;
+  max-width: 400px;
+  display: inline-flex;
   flex-direction: row;
   background: #FFF;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
@@ -193,11 +194,12 @@ export default Vue.extend({
   border-radius: 4px;
   margin: 5px 0;
 }
+
 .feature-type label {
   cursor: pointer;
   text-align: center;
-  flex-grow: 1;
-  padding: 10px;
+  padding: 10px 15px;
+  width: 100%;
 }
 
 .feature-type input:checked + label {

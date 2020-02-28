@@ -184,7 +184,8 @@ export default Vue.extend({
 <style scoped>
 .feature-type {
   width: 100%;
-  max-width: 400px;
+  max-width: calc(150px * 3);
+  overflow-x: scroll;
   display: inline-flex;
   flex-direction: row;
   background: #FFF;
@@ -196,10 +197,13 @@ export default Vue.extend({
 }
 
 .feature-type label {
+  display: inline-block;
   cursor: pointer;
   text-align: center;
   padding: 10px 15px;
   width: 100%;
+  min-width: 107px;
+  max-width: 150px;
 }
 
 .feature-type input:checked + label {

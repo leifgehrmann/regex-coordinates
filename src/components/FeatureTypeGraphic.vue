@@ -1,7 +1,7 @@
 <template>
   <div>
     <svg
-      viewBox="0 0 51 55"
+      viewBox="0 0 51 40"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -94,14 +94,6 @@
           </g>
         </g>
       </g>
-      <text
-        x="50%"
-        y="95%"
-        text-anchor="middle"
-        style="font-size: 10px"
-      >
-        {{ featureLabel }}
-      </text>
     </svg>
     {{ featureLabel }}
   </div>
@@ -138,6 +130,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+svg {
+  max-width: 100px;
+}
+
 .linestring {
   stroke: #000000;
 }

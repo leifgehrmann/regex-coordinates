@@ -1,9 +1,7 @@
 <template>
   <div>
     <svg
-      width="100px"
-      height="70px"
-      viewBox="0 0 51 34"
+      viewBox="0 0 51 40"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -97,6 +95,7 @@
         </g>
       </g>
     </svg>
+    {{ featureLabel }}
   </div>
 </template>
 
@@ -114,6 +113,10 @@ export default Vue.extend({
       type: String,
       default: 'both',
     },
+    featureLabel: {
+      type: String,
+      default: 'Both',
+    },
   },
   computed: {
     showLinestring(): 'visible'|'hidden' {
@@ -127,6 +130,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+svg {
+  max-width: 100px;
+}
+
 .linestring {
   stroke: #000000;
 }

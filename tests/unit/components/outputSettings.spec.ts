@@ -26,7 +26,7 @@ describe('OutputSettings', () => {
     await wrapper.vm.$nextTick();
 
     const emitted = wrapper.emitted();
-    expect(emitted['update:featureType'][0])
+    expect(emitted['update:featureType']?.[0])
       .toEqual(['points']);
   });
 
@@ -40,7 +40,7 @@ describe('OutputSettings', () => {
 
     // Assert an emit happened
     const emitted = wrapper.emitted();
-    expect(emitted['update:featureType'][1]).toEqual(['both']);
+    expect(emitted['update:featureType']?.[1]).toEqual(['both']);
   });
 
   test('updating featureType to Both display group settings', async () => {
@@ -67,7 +67,7 @@ describe('OutputSettings', () => {
 
     // Assert an emit happened
     const emitted = wrapper.emitted();
-    expect(emitted['update:groupBy'][0]).toEqual(['custom:Alpha']);
+    expect(emitted['update:groupBy']?.[0]).toEqual(['custom:Alpha']);
   });
 
   test('selecting second option in orderBy will emit new value', async () => {
@@ -77,7 +77,7 @@ describe('OutputSettings', () => {
 
     // Assert an emit happened
     const emitted = wrapper.emitted();
-    expect(emitted['update:orderBy'][0]).toEqual(['custom:Beta']);
+    expect(emitted['update:orderBy']?.[0]).toEqual(['custom:Beta']);
   });
 
   test('Adding to allGroupSettings does not clear selected groupBy/orderBy', async () => {
@@ -94,8 +94,8 @@ describe('OutputSettings', () => {
 
     // Assert an emit happened
     const emitted = wrapper.emitted();
-    expect(emitted['update:groupBy'][1]).toEqual(undefined);
-    expect(emitted['update:orderBy'][1]).toEqual(undefined);
+    expect(emitted['update:groupBy']?.[1]).toEqual(undefined);
+    expect(emitted['update:orderBy']?.[1]).toEqual(undefined);
   });
 
   test('Removing from allGroupSettings clears selected groupBy/orderBy', async () => {
@@ -109,8 +109,8 @@ describe('OutputSettings', () => {
 
     // Assert an emit happened
     const emitted = wrapper.emitted();
-    expect(emitted['update:groupBy'][1]).toEqual(['']);
-    expect(emitted['update:orderBy'][1]).toEqual(['']);
+    expect(emitted['update:groupBy']?.[1]).toEqual(['']);
+    expect(emitted['update:orderBy']?.[1]).toEqual(['']);
   });
 
   afterAll(() => {

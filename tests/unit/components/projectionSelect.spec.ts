@@ -59,7 +59,7 @@ describe('ProjectionSelect', () => {
 
     // Expect emitted value to be new search input
     const emitted = wrapper.emitted();
-    expect(emitted['update:searchInput'][0][0])
+    expect(emitted['update:searchInput']?.[0][0])
       .toEqual(newSearchInput);
     wrapper.setProps({
       searchInput: newSearchInput,

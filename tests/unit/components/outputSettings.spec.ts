@@ -1,4 +1,5 @@
 import { mount, Wrapper } from '@vue/test-utils';
+import '@testing-library/jest-dom';
 import OutputSettings from '@/components/OutputSettings.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +19,7 @@ describe('OutputSettings', () => {
         groupBy: '',
         orderBy: '',
       },
-      attachToDocument: true,
+      attachTo: document.body,
     });
   });
 
@@ -31,7 +32,7 @@ describe('OutputSettings', () => {
   });
 
   test('group settings are not visible for Point featureTypes', async () => {
-    expect(wrapper.find('.group-settings').isVisible()).toBe(false);
+    expect(wrapper.find('.group-settings').element).not.toBeVisible();
   });
 
   test('clicking featureType option Both will emit new featureType value', async () => {
@@ -48,7 +49,7 @@ describe('OutputSettings', () => {
     await wrapper.vm.$nextTick();
 
     // Assert the groupSettings element is displayed
-    expect(wrapper.find('.group-settings').isVisible()).toBe(true);
+    expect(wrapper.find('.group-settings').element).toBeVisible();
 
     // Assert that the correct groupBy/orderBy options appear in the right order
     const groupByOptions = wrapper.find('#group-by').findAll('option');

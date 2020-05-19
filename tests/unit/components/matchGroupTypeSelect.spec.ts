@@ -29,7 +29,7 @@ describe('MatchGroupTypeSelect', () => {
         isWgs84: false,
         value: 'x',
       },
-      attachToDocument: true,
+      attachTo: document.body,
     });
   });
 

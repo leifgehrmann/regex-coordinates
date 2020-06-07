@@ -21,4 +21,4 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Run audit
         run: |
-          npm audit
+          npm audit --production

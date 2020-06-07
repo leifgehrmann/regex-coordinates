@@ -135,11 +135,6 @@ import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import RegexInput from './components/RegexInput.vue';
-import DataInput from './components/DataInput.vue';
-import ProjectionSelect from './components/ProjectionSelect.vue';
-import GroupSettingsTable from './components/GroupSettingsTable.vue';
-import GeoJsonOutput from './components/GeoJsonOutput.vue';
 import Parser from '@/utils/parser';
 import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import GroupSettings from '@/utils/groupSettings';
@@ -148,6 +143,11 @@ import regExpFlagsFormatter from '@/utils/regExpFlagsFormatter';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
 import OutputSettings from '@/components/OutputSettings.vue';
+import GeoJsonOutput from './components/GeoJsonOutput.vue';
+import GroupSettingsTable from './components/GroupSettingsTable.vue';
+import ProjectionSelect from './components/ProjectionSelect.vue';
+import DataInput from './components/DataInput.vue';
+import RegexInput from './components/RegexInput.vue';
 
 library.add(faExternalLinkAlt);
 

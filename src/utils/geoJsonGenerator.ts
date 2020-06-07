@@ -14,7 +14,7 @@ interface Properties {
 
 interface PointFeature {
   type: string;
-  properties: object;
+  properties: Properties;
   geometry: {
     type: string;
     coordinates: number[];
@@ -23,7 +23,7 @@ interface PointFeature {
 
 interface LineStringFeature {
   type: 'Feature';
-  properties: object;
+  properties: Properties;
   geometry: {
     type: 'LineString';
     coordinates: number[][];
@@ -84,7 +84,7 @@ export default class GeoJsonGenerator {
     customTypes: string[],
     projection: proj4.Converter,
   ): PointFeature[] {
-    return parsedData.reduce((result: object[], rowGroup) => {
+    return parsedData.reduce((result: PointFeature[], rowGroup) => {
       let coordinate = [
         parseFloat(rowGroup[groupNumberLookupByType.x[0] + 1]),
         parseFloat(rowGroup[groupNumberLookupByType.y[0] + 1]),
@@ -237,7 +237,7 @@ export default class GeoJsonGenerator {
       && GeoJsonGenerator.objectHasProperty(matchGroupTypeLookup, 'y');
   }
 
-  private static objectHasProperty(obj: object, prop: string): boolean {
+  private static objectHasProperty(obj: NumericArrayObject, prop: string): boolean {
     return Object.prototype.hasOwnProperty.call(obj, prop);
   }
 }

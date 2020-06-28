@@ -312,6 +312,10 @@ export default Vue.extend({
     background: #212121;
   }
 
+  .search-input {
+    color: #FFFFFF;
+  }
+
   .search-results {
     background: #212121;
   }

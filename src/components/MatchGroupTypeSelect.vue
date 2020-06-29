@@ -313,6 +313,10 @@ export default Vue.extend({
 }
 
 @media (prefers-color-scheme: dark) {
+  .search-input {
+    color: #FFFFFF;
+  }
+
   .container {
     background: #212121;
     border: 1px solid #424242;

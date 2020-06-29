@@ -264,6 +264,7 @@ export default Vue.extend({
     background: #181818;
   }
   .group-by select, .order-by select {
+    color: #FFFFFF;
     background: #242424;
   }
 }

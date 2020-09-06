@@ -3,11 +3,6 @@ import GroupSettings from '@/utils/groupSettings';
 
 type NumericArrayObject = { [key: string]: number[] };
 
-interface FeatureCollection {
-  type: string;
-  features: (PointFeature|LineStringFeature)[];
-}
-
 interface Properties {
   [key: string]: string;
 }
@@ -28,6 +23,11 @@ interface LineStringFeature {
     type: 'LineString';
     coordinates: number[][];
   };
+}
+
+interface FeatureCollection {
+  type: string;
+  features: (PointFeature|LineStringFeature)[];
 }
 
 export default class GeoJsonGenerator {

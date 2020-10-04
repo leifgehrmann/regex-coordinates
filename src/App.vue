@@ -24,7 +24,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <v-container>
         <v-flex xs12>
           <p class="subtitle-1">
@@ -125,7 +125,7 @@
           <GeoJsonOutput :value="geoJson" />
         </v-flex>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

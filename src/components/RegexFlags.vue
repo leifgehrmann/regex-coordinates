@@ -100,9 +100,11 @@ export default Vue.extend({
     },
     flagOptionItems: {
       handler(): void {
+        const newFlags = JSON.parse(JSON.stringify(this.flags));
         this.flagOptionItems.forEach(({ key, selected }) => {
-          this.flags[key] = selected;
+          newFlags[key] = selected;
         });
+        this.$emit('update:flags', newFlags);
       },
       deep: true,
     },
@@ -113,7 +115,7 @@ export default Vue.extend({
   methods: {
     setFlags(): void {
       this.flagOptionItems.forEach(({ key }, i) => {
-        this.flagOptionItems[i].selected = this.flags[key];
+        this.flagOptionItems[i].selected = this.flags[key] ?? false;
       });
     },
     dismiss(): void {

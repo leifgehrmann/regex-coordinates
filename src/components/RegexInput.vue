@@ -14,7 +14,7 @@
       </div>
       <regex-flags
         class="regex-flags"
-        :flags.sync="flags"
+        :flags.sync="selectedFlags"
       />
     </div>
     <div
@@ -59,6 +59,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    selectedFlags: {} as RegExpFlagsConfig,
     errorMessage: 'Hello!',
     valueWatchEventHandler: (): void => {
       // do nothing.
@@ -69,6 +70,9 @@ export default Vue.extend({
   watch: {
     value(): void {
       this.valueWatchEventHandler();
+    },
+    selectedFlags(): void {
+      this.$emit('update:flags', this.selectedFlags);
     },
   },
   mounted() {
@@ -96,6 +100,8 @@ export default Vue.extend({
       this.valueWatchEventHandler = debounce(() => {
         this.update();
       }, 100);
+
+      this.selectedFlags = { ...this.flags };
     },
     initializeChangeEventHandler(): void {
       if (this.codeMirror === null) {

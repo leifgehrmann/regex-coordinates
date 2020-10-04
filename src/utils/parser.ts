@@ -24,6 +24,13 @@ export default class Parser {
       return allMatches;
     }
 
-    return Array.from(data.matchAll(this.regex));
+    if (this.regex.global) {
+      return Array.from(data.matchAll(this.regex));
+    }
+    const singleMatch = data.match(this.regex);
+    if (singleMatch) {
+      return [singleMatch];
+    }
+    return [];
   }
 }

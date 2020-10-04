@@ -154,13 +154,16 @@ export default Vue.extend({
     },
     items: {
       handler(updatedItems: Item[]): void {
+        // Clone the groupSettings so we can make changes to it.
+        const newAllGroupSettings = this.allGroupSettings.map((a) => ({ ...a }));
         updatedItems.forEach((updatedItem, index) => {
           if (this.allGroupSettings.length < 0) {
-            this.allGroupSettings.push(updatedItem.groupSettings);
+            newAllGroupSettings.push(updatedItem.groupSettings);
           } else {
-            this.allGroupSettings[index] = updatedItem.groupSettings;
+            newAllGroupSettings[index] = updatedItem.groupSettings;
           }
         });
+        this.$emit('update:allGroupSettings', newAllGroupSettings);
       },
       deep: true,
     },

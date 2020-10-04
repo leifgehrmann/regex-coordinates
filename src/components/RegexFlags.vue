@@ -100,9 +100,11 @@ export default Vue.extend({
     },
     flagOptionItems: {
       handler(): void {
+        const newFlags = { ...this.flags };
         this.flagOptionItems.forEach(({ key, selected }) => {
-          this.flags[key] = selected;
+          newFlags[key] = selected;
         });
+        this.$emit('update:flags', newFlags);
       },
       deep: true,
     },

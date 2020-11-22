@@ -35,7 +35,7 @@ describe('CopyOutputButton', () => {
     expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
     await new Promise((resolve) => setTimeout(() => {
       expect(getLabel(wrapper).textContent).toEqual('Copy to clipboard');
-      resolve();
+      resolve(null);
     }, 2500));
   });
 

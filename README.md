@@ -2,8 +2,6 @@
 
 [![Build Status](https://github.com/leifgehrmann/regex-coordinates/workflows/Tests/badge.svg?branch=master)](https://github.com/leifgehrmann/regex-coordinates/actions)
 [![Code Coverage](https://codecov.io/gh/leifgehrmann/regex-coordinates/branch/master/graph/badge.svg)](https://codecov.io/gh/leifgehrmann/regex-coordinates)
-[![dependency Status](https://david-dm.org/leifgehrmann/regex-coordinates/status.svg)](https://david-dm.org/leifgehrmann/regex-coordinates)
-[![devDependency Status](https://david-dm.org/leifgehrmann/regex-coordinates/dev-status.svg)](https://david-dm.org/leifgehrmann/regex-coordinates?type=dev)
 
 A single-page web application to parse text as coordinate data and
 output coordinate data as GeoJSON.

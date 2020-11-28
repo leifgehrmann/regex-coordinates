@@ -1,1 +1,1 @@
-export default any;
+declare module 'vue-popperjs';

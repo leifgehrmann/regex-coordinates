@@ -1,1 +1,1 @@
-export default PluginObject;
+declare module 'v-click-outside';

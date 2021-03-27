@@ -18,7 +18,7 @@ jobs:
         node-version: 14.x
     - name: npm install, build
       run: |
-        npm ci --force
+        npm ci
         npm run build
         touch ./dist/.nojekyll
         sed -i '/\/dist/d' .gitignore

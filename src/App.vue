@@ -1,132 +1,180 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-      absolute
+  <div
+    class="app"
+  >
+    <div
+      style="
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        max-width: 100%;
+        position: relative;
+        "
     >
-      <v-img
-        alt="Regex-Coordinates Logo"
-        src="../public/icon-white.svg"
-        class="shrink v-responsive"
-        style="width: 32px; margin-right:16px;"
-      />
-      <v-toolbar-title>Regex-Coordinates</v-toolbar-title>
-      <v-spacer />
-      <v-btn
-        href="https://github.com/leifgehrmann/regex-coordinates"
-        target="_blank"
-        text
+      <header>
+        <img
+          alt="Regex-Coordinates Logo"
+          src="../public/icon-white.svg"
+          style="
+            width: 32px;
+            margin-right:16px;
+            position: relative;
+            overflow: hidden;
+            max-width: 100%;
+            display: flex;
+          "
+        >
+        <div
+          style="
+            font-size: 1.25rem;
+            line-height: 1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding:12px;"
+        >
+          Regex-Coordinates
+        </div>
+        <div style="flex-grow: 1 !important;" />
+        <a
+          href="https://github.com/leifgehrmann/regex-coordinates"
+          target="_blank"
+          style="
+            color: #FFF;
+            padding:15px;
+            white-space: nowrap;
+            line-height: 2;
+            font-weight: 500;
+            letter-spacing: .0892857143em;
+            text-indent: .0892857143em;
+            font-size: .875rem;
+          "
+        >
+          <span
+            style="
+            display: inline-block;
+            text-transform: uppercase;
+            padding-right: 5px;"
+          >GitHub</span>
+          <font-awesome-icon icon="external-link-alt" />
+        </a>
+      </header>
+
+      <div
+        style="
+        padding: 0;
+        flex: 1 0 auto;
+max-width: 100%;
+display: flex;
+-webkit-box-flex: 1;
+        margin: auto;
+        "
       >
-        <span class="mr-2">GitHub</span>
-        <font-awesome-icon icon="external-link-alt" />
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <v-container>
-        <v-flex xs12>
-          <p class="subtitle-1">
-            A tool to quickly convert non-standard coordinate data into GeoJSON.
-          </p>
-          <h2>Step 1. Regular Expression</h2>
-          <p class="body-2">
-            Create a regular expression pattern with at least two
-            <a
-              href="https://www.regular-expressions.info/brackets.html"
-              target="_blank"
-            >
-              capture groups
-              <font-awesome-icon icon="external-link-alt" />
-            </a> for
-            the X and Y coordinates. Use
-            <a
-              href="https://regex101.com"
-              target="_blank"
-            >
-              regex101.com
-              <font-awesome-icon icon="external-link-alt" />
-            </a>
-            to help with creating the expression.
-            <strong>Note:</strong> Only the JavaScript Regex Engine is supported for now.
-          </p>
-          <RegexInput
-            :value.sync="regex"
-            :flags.sync="regexFlags"
-            :error.sync="regexHasError"
-          />
-
-          <h2>Step 2. Input data</h2>
-          <DataInput
-            :regex-string="!regexHasError ? regex : null"
-            :regex-flags-string="regexFlagsString"
-            :value.sync="data"
-          />
-
-          <h2>Step 3. Projection Settings</h2>
-          <p class="body-2">
-            Select the map projection the input data is in.
-            By default, we assume it is latitude/longitude (WGS 84).
-            Search
-            <a
-              href="https://epsg.io"
-              target="_blank"
-            >
-              epsg.io
-              <font-awesome-icon icon="external-link-alt" />
-            </a>
-            for information on other projection systems.
-          </p>
-          <ProjectionSelect
-            :selected-epsg-code.sync="projectionEpsgCode"
-            :selected-proj4.sync="projectionProj4"
-            :search-input.sync="projectionSearchInput"
-          />
-
-          <h2>Step 4. Capture Group Settings</h2>
-          <p class="body-2">
-            For each capture group in the regular expression, select the appropriate type.
-            A custom type can be made by entering your own value in the field.
-          </p>
-          <div class="horizontally-scroll-container">
-            <GroupSettingsTable
-              :regex-string="!regexHasError ? regex : null"
-              :regex-match-all-result="allMatchGroupsResult"
-              :is-wgs84="projectionEpsgCode === '4326'"
-              :all-group-settings.sync="allGroupSettings"
+        <div style="max-width: 1185px;padding: 15px;">
+          <!--xs12 -->
+          <div>
+            <p class="subtitle-1">
+              A tool to quickly convert non-standard coordinate data into GeoJSON.
+            </p>
+            <h2>Step 1. Regular Expression</h2>
+            <p class="body-2">
+              Create a regular expression pattern with at least two
+              <a
+                href="https://www.regular-expressions.info/brackets.html"
+                target="_blank"
+              >
+                capture groups
+                <font-awesome-icon icon="external-link-alt" />
+              </a> for
+              the X and Y coordinates. Use
+              <a
+                href="https://regex101.com"
+                target="_blank"
+              >
+                regex101.com
+                <font-awesome-icon icon="external-link-alt" />
+              </a>
+              to help with creating the expression.
+              <strong>Note:</strong> Only the JavaScript Regex Engine is supported for now.
+            </p>
+            <RegexInput
+              :value.sync="regex"
+              :flags.sync="regexFlags"
+              :error.sync="regexHasError"
             />
+
+            <h2>Step 2. Input data</h2>
+            <DataInput
+              :regex-string="!regexHasError ? regex : null"
+              :regex-flags-string="regexFlagsString"
+              :value.sync="data"
+            />
+
+            <h2>Step 3. Projection Settings</h2>
+            <p class="body-2">
+              Select the map projection the input data is in.
+              By default, we assume it is latitude/longitude (WGS 84).
+              Search
+              <a
+                href="https://epsg.io"
+                target="_blank"
+              >
+                epsg.io
+                <font-awesome-icon icon="external-link-alt" />
+              </a>
+              for information on other projection systems.
+            </p>
+            <ProjectionSelect
+              :selected-epsg-code.sync="projectionEpsgCode"
+              :selected-proj4.sync="projectionProj4"
+              :search-input.sync="projectionSearchInput"
+            />
+
+            <h2>Step 4. Capture Group Settings</h2>
+            <p class="body-2">
+              For each capture group in the regular expression, select the appropriate type.
+              A custom type can be made by entering your own value in the field.
+            </p>
+            <div class="horizontally-scroll-container">
+              <GroupSettingsTable
+                :regex-string="!regexHasError ? regex : null"
+                :regex-match-all-result="allMatchGroupsResult"
+                :is-wgs84="projectionEpsgCode === '4326'"
+                :all-group-settings.sync="allGroupSettings"
+              />
+            </div>
+
+            <h2>Step 5. Output Settings</h2>
+            <p class="body-2">
+              Select whether or not the output should consist of points, linestrings, or both.
+            </p>
+            <OutputSettings
+              :all-group-settings="allGroupSettings"
+              :feature-type.sync="outputSettingsFeatureType"
+              :group-by.sync="outputSettingsGroupBy"
+              :order-by.sync="outputSettingsOrderBy"
+            />
+
+            <h2>Output</h2>
+            <p class="body-2">
+              Copy and paste the output into any GeoJSON viewer. For example,
+              <a
+                href="http://geojson.io"
+                target="_blank"
+              >
+                geojson.io
+                <font-awesome-icon icon="external-link-alt" />
+              </a>
+            </p>
+            <DownloadOutputButton :value="geoJson" />
+            <CopyOutputButton :value="geoJson" />
+            <GeoJsonOutput :value="geoJson" />
           </div>
-
-          <h2>Step 5. Output Settings</h2>
-          <p class="body-2">
-            Select whether or not the output should consist of points, linestrings, or both.
-          </p>
-          <OutputSettings
-            :all-group-settings="allGroupSettings"
-            :feature-type.sync="outputSettingsFeatureType"
-            :group-by.sync="outputSettingsGroupBy"
-            :order-by.sync="outputSettingsOrderBy"
-          />
-
-          <h2>Output</h2>
-          <p class="body-2">
-            Copy and paste the output into any GeoJSON viewer. For example,
-            <a
-              href="http://geojson.io"
-              target="_blank"
-            >
-              geojson.io
-              <font-awesome-icon icon="external-link-alt" />
-            </a>
-          </p>
-          <DownloadOutputButton :value="geoJson" />
-          <CopyOutputButton :value="geoJson" />
-          <GeoJsonOutput :value="geoJson" />
-        </v-flex>
-      </v-container>
-    </v-main>
-  </v-app>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -298,8 +346,46 @@ h2 {
   margin-bottom: 10px;
 }
 
-.v-content {
-  background-color: #F6F6F6;
+.app {
+  background: #FFFFFF;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+}
+
+.app a {
+  color: #1976d2;
+}
+
+.app header {
+  background-color: #1976d2 !important;
+  border-color: #1976d2 !important;
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14);
+  color: #FFF;
+  border-radius: 0;
+  z-index: 1;
+  flex: 1 1 auto;
+  max-width: 100%;
+  height: 56px;
+  margin-top: 0;
+  transform: translateY(0px);
+  padding: 0 16px;
+  display: flex;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: #121212;
+    color: #FFFFFF;
+  }
+
+  .app a {
+    color: #2196f3;
+  }
+
+  .app header {
+    background-color: #2196f3 !important;
+    border-color: #2196f3 !important;
+  }
 }
 
 .horizontally-scroll-container {
@@ -310,8 +396,6 @@ h2 {
 }
 
 @media (prefers-color-scheme: dark) {
-  .v-content {
-    background-color: #121212;
-  }
+
 }
 </style>

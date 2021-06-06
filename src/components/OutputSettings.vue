@@ -241,6 +241,10 @@ export default Vue.extend({
 }
 
 .group-by select, .order-by select {
+  border: 0;
+  font-size: 16px;
+  -webkit-appearance: none;
+  margin: 0;
   background: #FFF;
   padding: 5px 31px 5px 10px;
   border-radius: 0 4px 4px 0;

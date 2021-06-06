@@ -24,16 +24,15 @@
       </td>
       <td v-if="regexMatchAllResult.length !== 0">
         <div class="horizontally-scrollable">
-          <v-chip
+          <div
             v-for="(matchedValue, index) in item.groupMatches"
             :key="index"
             :item="matchedValue"
             :index="index"
-            class="mr-2 v-chip--monospace"
-            small
+            class="chip"
           >
             {{ matchedValue }}
-          </v-chip>
+          </div>
         </div>
       </td>
     </tr>
@@ -246,9 +245,38 @@ tr td {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
+.chip {
+  border-radius: 12px;
+  font-size: 12px;
+  height: 24px;
+  background: #e0e0e0;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.87);
+  font-family: monospace;
+  margin-right: 8px!important;
+  align-items: center;
+  cursor: default;
+  display: inline-flex;
+  line-height: 20px;
+  max-width: 100%;
+  outline: none;
+  overflow: hidden;
+  padding: 0 12px;
+  position: relative;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
 @media (prefers-color-scheme: dark) {
   tr td {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .chip {
+    background: #555;
+    border-color: hsla(0,0%,100%,.12);
+    color: #fff;
   }
 }
 

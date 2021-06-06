@@ -251,6 +251,8 @@ export default Vue.extend({
 
 .search-input {
   max-width: 270px;
+  border: 0;
+  font-size: 16px;
   border-radius: 4px;
   padding-left: 7px;
   padding-top: 5px;

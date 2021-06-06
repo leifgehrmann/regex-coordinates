@@ -42,6 +42,8 @@ export default Vue.extend({
 
 <style scoped>
 button {
+  border: 0;
+  font-size: 16px;
   background-color: #FFF;
   border-radius: 4px;
   padding: 5px 15px;
@@ -58,6 +60,7 @@ button {
 
 @media (prefers-color-scheme: dark) {
   button {
+    color: #FFF;
     background-color: #242424;
   }
 }

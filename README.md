@@ -38,6 +38,6 @@ npm run lint
 
 This is my first time messing around with Vue. I'm normally more familiar with
 jQuery, but I'm using this project to try to understand Vue.
-I took the bold step of using Vue CLI and Vuetify to quickly get things up and
+I took the bold step of using Vue CLI to quickly get things up and
 running, but that does mean the structure of this project is garbage.
 This isn't my finest quality work 😅

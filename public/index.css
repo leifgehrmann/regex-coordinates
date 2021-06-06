@@ -1,0 +1,60 @@
+html, body {
+    margin: 0;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+button, input, optgroup, select, textarea {
+    font: inherit;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+*, :after, :before {
+    background-repeat: no-repeat;
+    -webkit-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+[role=button], [type=button], [type=reset], [type=submit], button {
+    cursor: pointer;
+    color: inherit;
+}
+
+button, input, select, textarea {
+    background-color: transparent;
+    border-style: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(18, 18, 18);
+    }
+}
+
+.subtitle-1 {
+    font-weight: 400;
+    font-family: Roboto,sans-serif!important;
+}
+
+h2 {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.body-2 {
+    font-size: .875rem!important;
+    letter-spacing: .0178571429em!important;
+    line-height: 1.25rem;
+}
+
+p {
+    margin: 0 0 16px;
+}

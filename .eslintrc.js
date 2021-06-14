@@ -8,7 +8,7 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:vue/recommended',
-    // '@vue/airbnb',
+    '@vue/airbnb',
     '@vue/typescript',
   ],
 

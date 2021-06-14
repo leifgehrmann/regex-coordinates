@@ -15,7 +15,7 @@
       <header>
         <img
           alt="Regex-Coordinates Logo"
-          src="../public/icon-white.svg"
+          src="/icon-white.svg"
           style="
             width: 32px;
             margin-right:16px;

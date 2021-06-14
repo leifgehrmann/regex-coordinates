@@ -8,7 +8,7 @@ export interface Token {
   text: string;
 }
 
-interface Literal extends Token {
+export interface Literal extends Token {
   type: 'literal';
   body: string;
   escaped: boolean;

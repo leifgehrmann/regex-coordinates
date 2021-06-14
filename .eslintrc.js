@@ -12,6 +12,12 @@ module.exports = {
     '@vue/typescript',
   ],
 
+  settings: {
+    'import/resolver': {
+      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
+    },
+  },
+
   parserOptions: {
     parser: '@typescript-eslint/parser',
     sourceType: 'module',

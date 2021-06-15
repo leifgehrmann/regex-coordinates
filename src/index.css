@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    a {
+        @apply text-blue-900;
+    }
+}
+
+html, body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+button, input, optgroup, select, textarea {
+    font: inherit;
+}
+
+[role=button], [type=button], [type=reset], [type=submit], button {
+    cursor: pointer;
+    color: inherit;
+}
+
+button, input, select, textarea {
+    background-color: transparent;
+    border-style: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(18, 18, 18);
+    }
+}
+
+.subtitle-1 {
+    font-weight: 400;
+    font-family: Roboto,sans-serif!important;
+}
+
+h2 {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.body-2 {
+    font-size: .875rem!important;
+    letter-spacing: .0178571429em!important;
+    line-height: 1.25rem;
+}
+
+p {
+    margin: 0 0 16px;
+}
+
+a {
+    text-decoration: none;
+}
+
+h2 {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+a {
+    color: #1976d2;
+}
+
+header {
+    background-color: #1976d2 !important;
+    border-color: #1976d2 !important;
+    color: #FFF;
+    border-radius: 0;
+    z-index: 1;
+    flex: 1 1 auto;
+    max-width: 100%;
+    height: 56px;
+    margin-top: 0;
+    transform: translateY(0px);
+    padding: 0 16px;
+    display: flex;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #121212;
+        color: #FFFFFF;
+    }
+
+    a {
+        color: #2196f3;
+    }
+
+    header {
+        background-color: #2196f3 !important;
+        border-color: #2196f3 !important;
+    }
+}

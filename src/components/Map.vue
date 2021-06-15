@@ -134,7 +134,6 @@ export default Vue.extend({
 
       return (feature: {properties: Record<string, string>}, layer: unknown) => {
         let tooltip = '';
-        // Todo: Fix injection
         Object.entries(feature.properties).forEach(([key, value]) => {
           tooltip += `<div>${str2html(key)}: ${str2html(value)}</div>`;
         });

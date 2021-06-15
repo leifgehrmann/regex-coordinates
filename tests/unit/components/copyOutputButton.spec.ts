@@ -24,7 +24,7 @@ describe('CopyOutputButton', () => {
     await wrapper.vm.$nextTick();
     const label = getLabel(wrapper);
     expect(label.style.width).toMatch(/[0-9]+px/);
-    expect(label.textContent).toEqual('Copy to clipboard');
+    expect(label.textContent).toEqual('Copy GeoJSON');
   });
 
   test('copies to clipboard', async () => {
@@ -34,7 +34,7 @@ describe('CopyOutputButton', () => {
     expect(console.error).toHaveBeenCalled();
     expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
     await new Promise((resolve) => setTimeout(() => {
-      expect(getLabel(wrapper).textContent).toEqual('Copy to clipboard');
+      expect(getLabel(wrapper).textContent).toEqual('Copy GeoJSON');
       resolve(null);
     }, 2500));
   });

@@ -1,7 +1,7 @@
 <template>
   <span>
     <button
-      class="copy-output-button"
+      class="copy-output-button text-base shadow"
       @click="copyToClipboard"
     >
       <font-awesome-icon
@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   data: () => ({
     icon: 'copy',
-    labelText: 'Copy to clipboard',
+    labelText: 'Copy GeoJSON',
   }),
   mounted(): void {
     const labels = this.$el.getElementsByClassName('copy-output-button-label');
@@ -59,7 +59,7 @@ export default Vue.extend({
       }
       setTimeout(() => {
         this.icon = 'copy';
-        this.labelText = 'Copy to clipboard';
+        this.labelText = 'Copy GeoJSON';
       }, 2 * 1000);
     },
     displayError(): void {
@@ -76,11 +76,6 @@ button {
   background-color: #FFF;
   border-radius: 4px;
   padding: 5px 15px;
-  margin: 10px 10px 10px 0;
-  box-shadow:
-    0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .copy-output-button-label {

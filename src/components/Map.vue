@@ -55,6 +55,7 @@
 import {
   Map,
   GeoJSON,
+  Icon,
 } from 'leaflet';
 import {
   LMap, LTileLayer, LGeoJson, LControl,
@@ -65,6 +66,23 @@ import { debounce } from 'debounce';
 import MapZoomButtons from '@/components/MapZoomButtons.vue';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
+
+type D = Icon.Default & {
+  _getIconUrl?: string;
+};
+
+// eslint-disable-next-line no-underscore-dangle
+delete (Icon.Default.prototype as D)._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: '/marker-icon@2x.png',
+  iconUrl: '/marker-icon.png',
+  shadowRetinaUrl: '/marker-shadow@2x.png',
+  shadowUrl: '/marker-shadow.png',
+  iconSize: [18, 26],
+  shadowSize: [9, 11],
+  iconAnchor: [9, 26],
+  shadowAnchor: [0, 11],
+});
 
 export default Vue.extend({
   name: 'Map',

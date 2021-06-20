@@ -166,7 +166,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    geojson(): void {
+    geoJson(): void {
       this.geoJsonWatchEventHandler();
     },
   },

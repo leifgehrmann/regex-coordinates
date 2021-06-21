@@ -41,6 +41,7 @@
               Want a basic example to see how everything works?
             </p>
             <button
+              id="loadExample"
               class="rounded bg-blue-500 text-white p-2 px-4 whitespace-nowrap"
               @click="loadExample"
             >

@@ -13,6 +13,11 @@ describe('App', () => {
     await wrapper.vm.$nextTick();
   });
 
+  test('load example works', async () => {
+    await wrapper.find('#loadExample').trigger('click');
+    await wrapper.vm.$nextTick();
+  });
+
   afterAll(() => {
     wrapper.destroy();
   });

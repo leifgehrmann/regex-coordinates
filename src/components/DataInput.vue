@@ -49,7 +49,7 @@ export default Vue.extend({
     value(): void {
       // If the input field is in focus, do not update, otherwise
       // the cursor will be sent to the very beginning!
-      if (!this.codeMirror.hasFocus()) {
+      if (this.codeMirror !== null && !this.codeMirror.hasFocus()) {
         this.codeMirror.setValue(this.value);
       }
       this.updateHighlightMatches();

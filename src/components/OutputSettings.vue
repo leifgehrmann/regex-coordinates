@@ -172,6 +172,9 @@ export default Vue.extend({
     mountedOrderBy(): void {
       this.$emit('update:orderBy', this.mountedOrderBy);
     },
+    featureType(newValue: string): void {
+      this.mountedFeatureType = newValue;
+    },
     groupBy(newValue: string): void {
       this.mountedGroupBy = newValue;
     },

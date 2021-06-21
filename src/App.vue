@@ -29,7 +29,14 @@
           <p class="subtitle-1">
             A tool to quickly convert non-standard coordinate data into GeoJSON.
           </p>
-          <div class="rounded-md bg-blue-100 dark:bg-blue-900 p-3 flex flex-col sm:flex-row md:flex-col lg:flex-row">
+          <div
+            class="
+              p-3 rounded-md
+              bg-blue-100 dark:bg-blue-900
+              flex
+              flex-col sm:flex-row md:flex-col lg:flex-row
+            "
+          >
             <p class="flex-grow pb-2 sm:py-2 md:pt-0 lg:py-2 m-0 text-blue-900 dark:text-white">
               Want a basic example to see how everything works?
             </p>
@@ -40,7 +47,9 @@
               Load Example
             </button>
           </div>
-          <h2 class="font-bold">Step 1. Regular Expression</h2>
+          <h2 class="font-bold">
+            Step 1. Regular Expression
+          </h2>
           <p class="body-2">
             Create a regular expression pattern with at least two
             <a
@@ -67,14 +76,18 @@
             :error.sync="regexHasError"
           />
 
-          <h2 class="font-bold">Step 2. Input data</h2>
+          <h2 class="font-bold">
+            Step 2. Input data
+          </h2>
           <DataInput
             :regex-string="!regexHasError ? regex : null"
             :regex-flags-string="regexFlagsString"
             :value.sync="data"
           />
 
-          <h2 class="font-bold">Step 3. Projection Settings</h2>
+          <h2 class="font-bold">
+            Step 3. Projection Settings
+          </h2>
           <p class="body-2">
             Select the map projection the input data is in.
             By default, we assume it is latitude/longitude (WGS 84).
@@ -94,7 +107,9 @@
             :search-input.sync="projectionSearchInput"
           />
 
-          <h2 class="font-bold">Step 4. Capture Group Settings</h2>
+          <h2 class="font-bold">
+            Step 4. Capture Group Settings
+          </h2>
           <p class="body-2">
             For each capture group in the regular expression, select the appropriate type.
             A custom type can be made by entering your own value in the field.
@@ -108,7 +123,9 @@
             />
           </div>
 
-          <h2 class="font-bold">Step 5. Output Settings</h2>
+          <h2 class="font-bold">
+            Step 5. Output Settings
+          </h2>
           <p class="body-2">
             Select whether or not the output should consist of points, linestrings, or both.
           </p>

@@ -29,6 +29,17 @@
           <p class="subtitle-1">
             A tool to quickly convert non-standard coordinate data into GeoJSON.
           </p>
+          <div class="rounded-md bg-blue-100 dark:bg-blue-900 p-3 flex flex-col sm:flex-row md:flex-col lg:flex-row">
+            <p class="flex-grow pb-2 sm:py-2 md:pt-0 lg:py-2 m-0 text-blue-900 dark:text-white">
+              Want a basic example to see how everything works?
+            </p>
+            <button
+              class="rounded bg-blue-500 text-white p-2 px-4 whitespace-nowrap"
+              @click="loadExample"
+            >
+              Load Example
+            </button>
+          </div>
           <h2 class="font-bold">Step 1. Regular Expression</h2>
           <p class="body-2">
             Create a regular expression pattern with at least two
@@ -229,6 +240,19 @@ export default Vue.extend({
 
   methods: {
     initialize(): void {
+      this.projectionEpsgCode = '4326';
+      this.projectionSearchInput = '4326';
+      this.outputSettingsFeatureType = 'both';
+      this.regexFlags = {
+        global: true,
+        multiline: true,
+        insensitive: false,
+        singleline: false,
+        unicode: false,
+        sticky: false,
+      };
+    },
+    loadExample(): void {
       this.regex = '\\| ([^|]*) \\| ([^|]*) \\| ([-0-9. ]*) \\| ([-0-9. ]*) \\|';
       this.data = `+-------+---------------------+----------+-----------+
 | Name  | Arrival Time        | Latitude | Longitude |

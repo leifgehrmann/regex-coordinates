@@ -139,6 +139,11 @@ export default Vue.extend({
         const inputField = this.getSearchInputField();
         inputField.value = this.selectedLabel;
       }
+      const selectedProjection = this.epsgIndex.getProjectionByCode(this.selectedEpsgCode);
+      if (selectedProjection !== null) {
+        this.selectedName = selectedProjection.name;
+        this.$emit('update:selectedProj4', selectedProjection.proj4);
+      }
     },
   },
   mounted() {

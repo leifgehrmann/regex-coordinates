@@ -44,7 +44,7 @@ export default class GeoJsonGenerator {
     const output = GeoJsonGenerator.generateFeatureCollection();
 
     if (!GeoJsonGenerator.hasCoordinatesDefined(groupNumberLookupByType)) {
-      return 'Please select Latitude and Longitude groups above.';
+      return 'Please select Latitude and Longitude groups in the capture group settings.';
     }
 
     if (featureType === 'points' || featureType === 'both') {

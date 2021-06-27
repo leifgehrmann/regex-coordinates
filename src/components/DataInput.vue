@@ -116,16 +116,18 @@ export default Vue.extend({
         return;
       }
       const doc = this.codeMirror.getDoc();
-      this.parser.parse(this.value).forEach((regExpMatchArray, regExpMatchArrayIndex) => {
+      const regExpMatchArrays = this.parser.parseFiniteMatches(this.value, this.maxMarkers);
+      // Use .every to skip iterating through all results of the array.
+      regExpMatchArrays.every((regExpMatchArray, regExpMatchArrayIndex) => {
         if (this.codeMirror === null) {
-          return;
+          return false;
         }
         if (regExpMatchArrayIndex > this.maxMarkers) {
-          return;
+          return false;
         }
         const indexStart = regExpMatchArray.index;
         if (indexStart === undefined) {
-          return;
+          return false;
         }
         const tokenLength = regExpMatchArray[0].length;
         const indexEnd = indexStart + tokenLength;
@@ -138,6 +140,7 @@ export default Vue.extend({
           },
         );
         this.textMarkers.push(textMarker);
+        return true;
       });
     },
   },

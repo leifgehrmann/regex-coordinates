@@ -1,5 +1,5 @@
-import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 import proj4 from 'proj4';
+import GeoJsonGenerator from '@/utils/geoJsonGenerator';
 
 describe('GeoJsonGenerator', () => {
   it('works generally', () => {

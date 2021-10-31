@@ -85,7 +85,7 @@ Icon.Default.mergeOptions({
 });
 
 export default Vue.extend({
-  name: 'Map',
+  name: 'MapData',
   components: {
     LMap,
     LTileLayer,

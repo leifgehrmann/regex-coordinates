@@ -152,7 +152,7 @@
         </a>
       </p>
       -->
-      <Map :geo-json="geoJson" />
+      <MapData :geo-json="geoJson" />
     </div>
   </div>
 </template>
@@ -173,7 +173,7 @@ import GroupSettingsTable from './components/GroupSettingsTable.vue';
 import ProjectionSelect from './components/ProjectionSelect.vue';
 import DataInput from './components/DataInput.vue';
 import RegexInput from './components/RegexInput.vue';
-import Map from './components/Map.vue';
+import MapData from './components/MapData.vue';
 
 library.add(faExternalLinkAlt);
 
@@ -186,7 +186,7 @@ export default Vue.extend({
     ProjectionSelect,
     GroupSettingsTable,
     OutputSettings,
-    Map,
+    MapData,
     FontAwesomeIcon,
   },
 

@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import { mount, Wrapper } from '@vue/test-utils';
-import Map from '@/components/Map.vue';
+import MapData from '@/components/MapData.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let wrapper: Wrapper<any>;
 
-describe('Map', () => {
+describe('MapData', () => {
   beforeAll(() => {
-    wrapper = mount(Map, {
+    wrapper = mount(MapData, {
       propsData: {
         geoJson: '',
       },

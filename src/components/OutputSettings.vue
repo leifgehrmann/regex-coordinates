@@ -1,39 +1,39 @@
 <template>
   <div>
     <div class="feature-type">
-      <input
-        id="points"
-        v-model="mountedFeatureType"
-        type="radio"
-        value="points"
-      >
       <label for="points">
+        <input
+          id="points"
+          v-model="mountedFeatureType"
+          type="radio"
+          value="points"
+        >
         <FeatureTypeGraphic
           feature-type="points"
           feature-label="Points"
           :selected="mountedFeatureType==='points'"
         />
       </label>
-      <input
-        id="both"
-        v-model="mountedFeatureType"
-        type="radio"
-        value="both"
-      >
       <label for="both">
+        <input
+          id="both"
+          v-model="mountedFeatureType"
+          type="radio"
+          value="both"
+        >
         <FeatureTypeGraphic
           feature-type="both"
           feature-label="Both"
           :selected="mountedFeatureType==='both'"
         />
       </label>
-      <input
-        id="linestring"
-        v-model="mountedFeatureType"
-        type="radio"
-        value="linestring"
-      >
       <label for="linestring">
+        <input
+          id="linestring"
+          v-model="mountedFeatureType"
+          type="radio"
+          value="linestring"
+        >
         <FeatureTypeGraphic
           feature-type="linestring"
           feature-label="Linestring"
@@ -46,38 +46,42 @@
       :style="{display: featureType !== 'points' ? 'block' : 'none'}"
     >
       <div class="group-by">
-        <label for="group-by">Group by...</label>
-        <select
-          id="group-by"
-          v-model="mountedGroupBy"
-        >
-          <option
-            v-for="(customType, index) in customTypes"
-            :key="index"
-            :value="customType.value"
+        <label for="group-by">
+          <span>Group by...</span>
+          <select
+            id="group-by"
+            v-model="mountedGroupBy"
           >
-            {{ customType.text }}
-          </option>
-        </select>
+            <option
+              v-for="(customType, index) in customTypes"
+              :key="index"
+              :value="customType.value"
+            >
+              {{ customType.text }}
+            </option>
+          </select>
+        </label>
         <span class="dropdown-icon">
           <font-awesome-icon icon="chevron-down" />
         </span>
       </div>
       <br>
       <div class="order-by">
-        <label for="order-by">Order by...</label>
-        <select
-          id="order-by"
-          v-model="mountedOrderBy"
-        >
-          <option
-            v-for="(customType, index) in customTypes"
-            :key="index"
-            :value="customType.value"
+        <label for="order-by">
+          <span>Order by...</span>
+          <select
+            id="order-by"
+            v-model="mountedOrderBy"
           >
-            {{ customType.text }}
-          </option>
-        </select>
+            <option
+              v-for="(customType, index) in customTypes"
+              :key="index"
+              :value="customType.value"
+            >
+              {{ customType.text }}
+            </option>
+          </select>
+        </label>
         <span
           class="dropdown-icon"
         >
@@ -244,7 +248,7 @@ export default Vue.extend({
   position: relative;
 }
 
-.group-by label, .order-by label {
+.group-by label span, .order-by label span {
   border-radius: 4px 0 0 4px;
   padding: 5px 10px;
 }

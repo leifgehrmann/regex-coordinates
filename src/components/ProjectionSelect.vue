@@ -4,6 +4,7 @@
   >
     <div class="container">
       <input
+        aria-label="Projection Search Field"
         class="search-input"
         type="text"
         placeholder="Enter an EPSG code or name..."
@@ -34,6 +35,7 @@
             :class="{ 'search-result-list-item-selected': index === current }"
             class="search-results-list-item"
             @click="selectProjection(match, index)"
+            @keyup.space="selectProjection(match, index)"
             @mousemove="current = index"
           >
             EPSG:{{ match.code }} - {{ match.name }}

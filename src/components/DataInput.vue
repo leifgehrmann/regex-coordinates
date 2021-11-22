@@ -3,6 +3,7 @@
     <div class="codemirror-container">
       <textarea
         ref="textarea"
+        aria-label="Data Input"
       />
     </div>
   </div>

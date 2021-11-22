@@ -7,6 +7,7 @@
       <div class="codemirror-container">
         <textarea
           ref="textarea"
+          aria-label="Regex Input"
         />
       </div>
       <div class="regex-delimiter">

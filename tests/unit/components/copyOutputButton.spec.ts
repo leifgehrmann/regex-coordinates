@@ -1,6 +1,9 @@
-/* eslint-disable no-console */
 import { mount, Wrapper } from '@vue/test-utils';
+import copy from 'copy-to-clipboard';
+import { mocked } from 'ts-jest/utils';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
+
+jest.mock('copy-to-clipboard');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getLabel(wrapper: Wrapper<any>): HTMLSpanElement {
@@ -12,7 +15,10 @@ function getLabel(wrapper: Wrapper<any>): HTMLSpanElement {
 let wrapper: Wrapper<any>;
 
 describe('CopyOutputButton', () => {
+  const mockedCopy = mocked(copy);
+
   beforeAll(() => {
+    mockedCopy.mockClear();
     wrapper = mount(CopyOutputButton, {
       propsData: {
         value: 'hello world',
@@ -27,16 +33,26 @@ describe('CopyOutputButton', () => {
     expect(label.textContent).toEqual('Copy GeoJSON');
   });
 
-  test('copies to clipboard', async () => {
-    console.error = jest.fn();
+  test('copies to clipboard, with success', async () => {
+    mockedCopy.mockReturnValue(true);
     wrapper.find('.copy-output-button').trigger('click');
     await wrapper.vm.$nextTick();
-    expect(console.error).toHaveBeenCalled();
-    expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
-    await new Promise((resolve) => setTimeout(() => {
+    expect(mockedCopy).toHaveBeenCalled();
+    expect(getLabel(wrapper).textContent).toEqual('Copied!');
+    setTimeout(() => {
       expect(getLabel(wrapper).textContent).toEqual('Copy GeoJSON');
-      resolve(null);
-    }, 2500));
+    }, 2500);
+  });
+
+  test('copies to clipboard, but with error', async () => {
+    mockedCopy.mockReturnValue(false);
+    wrapper.find('.copy-output-button').trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(mockedCopy).toHaveBeenCalled();
+    expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
+    setTimeout(() => {
+      expect(getLabel(wrapper).textContent).toEqual('Copy GeoJSON');
+    }, 2500);
   });
 
   afterAll(() => {

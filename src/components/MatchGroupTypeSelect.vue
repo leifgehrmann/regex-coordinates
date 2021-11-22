@@ -18,6 +18,7 @@
         <input
           class="search-input"
           type="text"
+          aria-label="Search for a match group"
           placeholder=""
           @focusin="focusin"
           @keydown.enter="enter"
@@ -43,6 +44,7 @@
               :class="{ 'search-result-list-item-selected': index === current }"
               class="search-results-list-item"
               @click="selectOptionFromList(option, index)"
+              @keyup.space="selectOptionFromList(option, index)"
               @mousemove="current = index"
             >
               <span v-if="option.text === ''">-</span>

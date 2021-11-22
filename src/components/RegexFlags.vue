@@ -3,6 +3,7 @@
     <div
       class="selected-flags-container"
       @click="showDropdown = !showDropdown"
+      @keyup.space="showDropdown = !showDropdown"
     >
       <span class="selected-flags">{{ selectedFlags }}</span>
       <font-awesome-icon icon="flag" />
@@ -18,6 +19,7 @@
             v-for="flagOptionItem in flagOptionItems"
             :key="flagOptionItem.key"
             @click="flagOptionItem.selected = !flagOptionItem.selected"
+            @keyup.space="flagOptionItem.selected = !flagOptionItem.selected"
           >
             <font-awesome-icon
               icon="check"

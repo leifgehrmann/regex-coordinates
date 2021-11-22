@@ -33,10 +33,9 @@ describe('CopyOutputButton', () => {
     await wrapper.vm.$nextTick();
     expect(console.error).toHaveBeenCalled();
     expect(getLabel(wrapper).textContent).toEqual('Failed to copy');
-    await new Promise((resolve) => setTimeout(() => {
+    setTimeout(() => {
       expect(getLabel(wrapper).textContent).toEqual('Copy GeoJSON');
-      resolve(null);
-    }, 2500));
+    }, 2500);
   });
 
   afterAll(() => {

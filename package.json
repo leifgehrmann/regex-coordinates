@@ -30,7 +30,7 @@
     "vue2-leaflet": "^2.7.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/jest-dom": "^5.15.1",
     "@types/codemirror": "5.60.5",
     "@types/debounce": "^1.2.1",
     "@types/file-saver": "^2.0.4",
@@ -49,7 +49,7 @@
     "eslint-plugin-vue": "^8.1.1",
     "jest": "^27.3.1",
     "jest-transform-stub": "^2.0.0",
-    "postcss": "^8.3.11",
+    "postcss": "^8.4.4",
     "tailwindcss": "^2.2.19",
     "ts-jest": "^27.0.7",
     "typescript": "^4.5.2",

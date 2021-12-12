@@ -1,7 +1,7 @@
 import { mount, Wrapper } from '@vue/test-utils';
 import copy from 'copy-to-clipboard';
-import CopyOutputButton from '@/components/CopyOutputButton.vue';
 import { mocked } from 'jest-mock';
+import CopyOutputButton from '@/components/CopyOutputButton.vue';
 
 jest.mock('copy-to-clipboard');
 

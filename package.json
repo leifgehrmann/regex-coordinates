@@ -46,7 +46,7 @@
     "eslint": "^8.6.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-vue": "^8.2.0",
+    "eslint-plugin-vue": "^8.3.0",
     "jest": "^27.4.7",
     "jest-mock": "^27.4.6",
     "jest-transform-stub": "^2.0.0",

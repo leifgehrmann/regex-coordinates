@@ -71,6 +71,14 @@ type D = Icon.Default & {
   _getIconUrl?: string;
 };
 
+interface Feature {
+  geometry: {
+    type: 'Point'|'LineString';
+    coordinates: [number, number]|[number, number][];
+  }
+  properties: Record<string, string>;
+}
+
 // eslint-disable-next-line no-underscore-dangle
 delete (Icon.Default.prototype as D)._getIconUrl;
 Icon.Default.mergeOptions({
@@ -150,8 +158,12 @@ export default Vue.extend({
         return output;
       };
 
-      return (feature: {properties: Record<string, string>}, layer: unknown) => {
+      return (feature: Feature, layer: unknown) => {
         let tooltip = '';
+        if (feature.geometry.type === 'Point') {
+          tooltip += `<div>Latitude: ${str2html(feature.geometry.coordinates[1].toString())}</div>`;
+          tooltip += `<div>Longitude: ${str2html(feature.geometry.coordinates[0].toString())}</div>`;
+        }
         Object.entries(feature.properties).forEach(([key, value]) => {
           tooltip += `<div>${str2html(key)}: ${str2html(value)}</div>`;
         });

@@ -63,6 +63,7 @@ import {
 import 'leaflet/dist/leaflet.css';
 import Vue from 'vue';
 import { debounce } from 'debounce';
+import tooltipGenerator from '@/utils/tooltipGenerator';
 import MapZoomButtons from '@/components/MapZoomButtons.vue';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
@@ -143,26 +144,7 @@ export default Vue.extend({
       });
     },
     onEachFeatureFunction() {
-      const str2html = (input: string): string => {
-        let output = input.replace(/&/g, '&amp;');
-        output = output.replace(/</g, '&lt;');
-        output = output.replace(/>/g, '&gt;');
-        return output;
-      };
-
-      return (feature: {properties: Record<string, string>}, layer: unknown) => {
-        let tooltip = '';
-        Object.entries(feature.properties).forEach(([key, value]) => {
-          tooltip += `<div>${str2html(key)}: ${str2html(value)}</div>`;
-        });
-        layer.bindTooltip(
-          tooltip,
-          {
-            permanent: false,
-            sticky: true,
-          },
-        );
-      };
+      return tooltipGenerator;
     },
   },
   watch: {

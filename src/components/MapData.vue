@@ -63,6 +63,7 @@ import {
 import 'leaflet/dist/leaflet.css';
 import Vue from 'vue';
 import { debounce } from 'debounce';
+import tooltipGenerator from '@/utils/tooltipGenerator';
 import MapZoomButtons from '@/components/MapZoomButtons.vue';
 import DownloadOutputButton from '@/components/DownloadOutputButton.vue';
 import CopyOutputButton from '@/components/CopyOutputButton.vue';
@@ -70,14 +71,6 @@ import CopyOutputButton from '@/components/CopyOutputButton.vue';
 type D = Icon.Default & {
   _getIconUrl?: string;
 };
-
-interface Feature {
-  geometry: {
-    type: 'Point'|'LineString';
-    coordinates: [number, number]|[number, number][];
-  }
-  properties: Record<string, string>;
-}
 
 // eslint-disable-next-line no-underscore-dangle
 delete (Icon.Default.prototype as D)._getIconUrl;
@@ -151,30 +144,7 @@ export default Vue.extend({
       });
     },
     onEachFeatureFunction() {
-      const str2html = (input: string): string => {
-        let output = input.replace(/&/g, '&amp;');
-        output = output.replace(/</g, '&lt;');
-        output = output.replace(/>/g, '&gt;');
-        return output;
-      };
-
-      return (feature: Feature, layer: unknown) => {
-        let tooltip = '';
-        if (feature.geometry.type === 'Point') {
-          tooltip += `<div>Latitude: ${str2html(feature.geometry.coordinates[1].toString())}</div>`;
-          tooltip += `<div>Longitude: ${str2html(feature.geometry.coordinates[0].toString())}</div>`;
-        }
-        Object.entries(feature.properties).forEach(([key, value]) => {
-          tooltip += `<div>${str2html(key)}: ${str2html(value)}</div>`;
-        });
-        layer.bindTooltip(
-          tooltip,
-          {
-            permanent: false,
-            sticky: true,
-          },
-        );
-      };
+      return tooltipGenerator;
     },
   },
   watch: {

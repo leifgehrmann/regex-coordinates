@@ -27,6 +27,7 @@ module.exports = {
   rules: {
     semi: 'off',
     '@typescript-eslint/semi': ['error'],
+    'no-unused-vars': 'off', // As recommended by https://stackoverflow.com/a/63798664
   },
 
   overrides: [

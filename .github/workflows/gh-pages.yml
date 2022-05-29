@@ -23,7 +23,7 @@ jobs:
         npm run build
         touch ./dist/.nojekyll
         sed -i '/\/dist/d' .gitignore
-        echo "regexcoordinates.xyz" >> ./dist/CNAME
+        echo "regex-coordinates.leifgehrmann.com" >> ./dist/CNAME
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3

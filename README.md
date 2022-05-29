@@ -6,7 +6,7 @@
 A single-page web application to parse text as coordinate data and
 output coordinate data as GeoJSON.
 
-Visit https://regexcoordinates.xyz/ to see it live.
+Visit https://regex-coordinates.leifgehrmann.com/ to see it live.
 
 It solves a common use-case where one has a bunch of poorly structure CSV or
 database table output and one wants to simply display it quickly on a map.

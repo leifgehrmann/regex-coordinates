@@ -8,7 +8,7 @@
       :force-show="searching"
       :options="{
         placement: 'bottom-start',
-        'boundaries-selector': 'v-application'
+        'boundaries-selector': 'v-application',
       }"
     >
       <div
@@ -30,7 +30,7 @@
         <div class="dropdown-icon">
           <font-awesome-icon
             icon="chevron-down"
-            :style="{display: !searching ? 'inline-block' : 'none'}"
+            :style="{ display: !searching ? 'inline-block' : 'none' }"
             @click="toggle"
           />
         </div>

@@ -1,6 +1,7 @@
 <template>
   <span>
     <button
+      type="button"
       class="text-base shadow"
       @click="download"
     >

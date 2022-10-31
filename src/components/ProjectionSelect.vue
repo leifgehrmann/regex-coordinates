@@ -18,7 +18,7 @@
       <div class="clear-button">
         <font-awesome-icon
           icon="times-circle"
-          :style="{visibility: selectedEpsgCode !== '' ? 'visible' : 'hidden'}"
+          :style="{ visibility: selectedEpsgCode !== '' ? 'visible' : 'hidden' }"
           @click="clearProjection"
         />
       </div>
@@ -46,6 +46,7 @@
           >
             <a
               target="_blank"
+              rel="noopener noreferrer"
               :href="`https://epsg.io/?q=${encodeURI(searchInput)}`"
             >
               <font-awesome-icon

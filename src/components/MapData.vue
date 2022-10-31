@@ -4,7 +4,7 @@
       ref="leafletMap"
       :zoom="zoom"
       :center="center"
-      :options="{zoomControl: false}"
+      :options="{ zoomControl: false }"
       class="h-full"
       @ready="onReady()"
     >

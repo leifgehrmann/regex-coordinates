@@ -11,7 +11,7 @@
         <FeatureTypeGraphic
           feature-type="points"
           feature-label="Points"
-          :selected="mountedFeatureType==='points'"
+          :selected="mountedFeatureType === 'points'"
         />
       </label>
       <label for="both">
@@ -24,7 +24,7 @@
         <FeatureTypeGraphic
           feature-type="both"
           feature-label="Both"
-          :selected="mountedFeatureType==='both'"
+          :selected="mountedFeatureType === 'both'"
         />
       </label>
       <label for="linestring">
@@ -37,13 +37,13 @@
         <FeatureTypeGraphic
           feature-type="linestring"
           feature-label="Linestring"
-          :selected="mountedFeatureType==='linestring'"
+          :selected="mountedFeatureType === 'linestring'"
         />
       </label>
     </div>
     <div
       class="group-settings"
-      :style="{display: featureType !== 'points' ? 'block' : 'none'}"
+      :style="{ display: featureType !== 'points' ? 'block' : 'none' }"
     >
       <div class="group-by">
         <label for="group-by">

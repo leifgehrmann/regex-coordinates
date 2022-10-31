@@ -28,6 +28,7 @@ module.exports = {
     semi: 'off',
     '@typescript-eslint/semi': ['error'],
     'no-unused-vars': 'off', // As recommended by https://stackoverflow.com/a/63798664
+    'import/extensions': 'off', // For some unknown reason, we need to disable this rule.
   },
 
   overrides: [

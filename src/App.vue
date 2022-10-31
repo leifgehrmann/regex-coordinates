@@ -14,6 +14,7 @@
         <a
           href="https://github.com/leifgehrmann/regex-coordinates"
           target="_blank"
+          rel="noopener noreferrer"
           class="text-white p-4 whitespace-nowrap leading-loose font-medium tracking-wider text-sm"
         >
           <span class="inline-block uppercase pr-2">
@@ -42,6 +43,7 @@
             </p>
             <button
               id="loadExample"
+              type="button"
               class="rounded bg-blue-500 text-white p-2 px-4 whitespace-nowrap"
               @click="loadExample"
             >
@@ -56,6 +58,7 @@
             <a
               href="https://www.regular-expressions.info/brackets.html"
               target="_blank"
+              rel="noopener noreferrer"
             >
               capture groups
               <font-awesome-icon icon="external-link-alt" />
@@ -64,6 +67,7 @@
             <a
               href="https://regex101.com"
               target="_blank"
+              rel="noopener noreferrer"
             >
               regex101.com
               <font-awesome-icon icon="external-link-alt" />
@@ -96,6 +100,7 @@
             <a
               href="https://epsg.io"
               target="_blank"
+              rel="noopener noreferrer"
             >
               epsg.io
               <font-awesome-icon icon="external-link-alt" />

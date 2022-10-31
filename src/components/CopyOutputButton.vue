@@ -1,6 +1,7 @@
 <template>
   <span>
     <button
+      type="button"
       class="copy-output-button text-base shadow"
       @click="copyToClipboard"
     >

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col text-base shadow rounded-md">
-    <button @click="$emit('zoomIn')">
+    <button type="button" @click="$emit('zoomIn')">
       <font-awesome-icon icon="plus" />
     </button>
-    <button @click="$emit('zoomOut')">
+    <button type="button" @click="$emit('zoomOut')">
       <font-awesome-icon icon="minus" />
     </button>
   </div>

@@ -23,7 +23,7 @@
           >
             <font-awesome-icon
               icon="check"
-              :style="{visibility: flagOptionItem.selected ? 'visible' : 'hidden'}"
+              :style="{ visibility: flagOptionItem.selected ? 'visible' : 'hidden' }"
             />
             {{ flagOptionItem.label }}
           </li>
